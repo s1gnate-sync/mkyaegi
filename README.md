@@ -27,13 +27,17 @@ usage
 ```
 yaegi [OPTIONS] [SCRIPT [ARGS]]
 
-Usage:
+Usage of ./yaegi:
   -eval code
     	evaluate code before running script
+  -keep-init-main
+    	do not blank init and main functions before entering repl
   -no-env
     	start with empty environment
   -no-import-used
     	disable automatic import of used packages
+  -repl
+    	enter repl after script
   -tags string
     	build tags
 
@@ -51,6 +55,16 @@ Examples:
 
 	# eval code and execute script
 	yaegi -eval "println(1)" script.go a b c
+
+	# enter repl after script 
+	yaegi -repl script.go 
+
+	# same, but for shebang 
+	YAEGI_REPL=1 ./script.go
+
+	# all 3
+	yaegi -repl -eval "runs before script" script.go
+	> enters repl after script
 	
 ```
 

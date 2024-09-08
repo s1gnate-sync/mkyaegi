@@ -23,8 +23,10 @@ const (
 func main() {
 	flags := flag.NewFlagSet(os.Args[0], flag.ExitOnError)
 	noImportUsed := flags.Bool("no-import-used", false, "disable automatic import of used packages")
+	keepInitMain := flags.Bool("keep-init-main", false, "do not blank init and main functions before entering repl")
 	noEnv := flags.Bool("no-env", false, "start with empty environment")
 	eval := flags.String("eval", "", "evaluate `code` before running script")
+	replAfterScript := flags.Bool("repl", os.Getenv("YAEGI_REPL") != "", "enter repl after script")
 	tags := flags.String("tags", "", "build tags")
 
 	flags.Parse(os.Args[1:])
@@ -34,7 +36,7 @@ func main() {
 		env = os.Environ()
 	}
 
-	args := flag.Args()
+	args := flags.Args()
 	script := "-"
 	if len(args) > 0 {
 		script = args[0]
@@ -43,7 +45,7 @@ func main() {
 
 	instance, err := lib.Interp(interp.Options{
 		BuildTags: strings.Split(*tags, ","),
-		Args:      args,
+		Args:      append([]string{script}, args...),
 		Env:       env,
 	}, !*noImportUsed)
 
@@ -80,7 +82,11 @@ func main() {
 		}
 	}
 
-	if script == "-" {
+	if script == "-" || *replAfterScript {
+		if !*keepInitMain {
+			instance.Eval("func main(){}\nfunc init(){}\n")
+		}
+
 		result, err := repl(instance, script)
 
 		if err != nil {
@@ -139,7 +145,7 @@ func repl(instance *interp.Interpreter, name string) (reflect.Value, error) {
 		lines = ""
 
 		if value.IsValid() {
-			fmt.Fprintln(os.Stdout, ":", value)
+			fmt.Fprintln(os.Stdout, value)
 		}
 
 		reader.SetPrompt(prompt)

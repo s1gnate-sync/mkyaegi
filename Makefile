@@ -13,4 +13,4 @@ extract:
 yaegi0: yaegi
 	upx --best -o yaegi0 yaegi
 
-.PHONY: generate
+.PHONY: generate yaegi yaegi0 extract 
