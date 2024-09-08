@@ -32,5 +32,9 @@ func Load(instance *interp.Interpreter) (err error) {
 		return
 	}
 
+	if err = instance.Use(Symbols); err != nil {
+		return
+	}
+
 	return nil
 }
