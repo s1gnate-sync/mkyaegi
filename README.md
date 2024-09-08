@@ -11,13 +11,15 @@ package lib
 
 ```
 
-`$ make generate`
+`make generate`
 
 
 building
 --------
 
-`$ make`
+`make`
+
+to reduce size install `upx` and run `make yaegi0`
 
 usage
 -----

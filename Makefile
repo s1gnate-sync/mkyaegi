@@ -10,4 +10,7 @@ generate: extract lib/go1.23-generate.go
 extract:
 	GOBIN=$(PWD) go install github.com/traefik/yaegi/internal/cmd/extract@latest
 
+yaegi0: yaegi
+	upx --best -o yaegi0 yaegi
+
 .PHONY: generate
