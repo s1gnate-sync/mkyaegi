@@ -1,0 +1,14 @@
+func FileExports(src *File) bool
+func FilterDecl(decl Decl, f Filter) bool
+func FilterFile(src *File, f Filter) bool
+func FilterPackage(pkg *Package, f Filter) bool
+func Fprint(w io.Writer, fset *token.FileSet, x any, f FieldFilter) error
+func Inspect(node Node, f func(Node) bool)
+func IsExported(name string) bool
+func IsGenerated(file *File) bool
+func NotNilFilter(_ string, v reflect.Value) bool
+func PackageExports(pkg *Package) bool
+func Preorder(root Node) iter.Seq[Node]
+func Print(fset *token.FileSet, x any) error
+func SortImports(fset *token.FileSet, f *File)
+func Walk(v Visitor, node Node)

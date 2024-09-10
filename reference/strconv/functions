@@ -1,0 +1,36 @@
+func AppendBool(dst []byte, b bool) []byte
+func AppendFloat(dst []byte, f float64, fmt byte, prec, bitSize int) []byte
+func AppendInt(dst []byte, i int64, base int) []byte
+func AppendQuote(dst []byte, s string) []byte
+func AppendQuoteRune(dst []byte, r rune) []byte
+func AppendQuoteRuneToASCII(dst []byte, r rune) []byte
+func AppendQuoteRuneToGraphic(dst []byte, r rune) []byte
+func AppendQuoteToASCII(dst []byte, s string) []byte
+func AppendQuoteToGraphic(dst []byte, s string) []byte
+func AppendUint(dst []byte, i uint64, base int) []byte
+func Atoi(s string) (int, error)
+func CanBackquote(s string) bool
+func FormatBool(b bool) string
+func FormatComplex(c complex128, fmt byte, prec, bitSize int) string
+func FormatFloat(f float64, fmt byte, prec, bitSize int) string
+func FormatInt(i int64, base int) string
+func FormatUint(i uint64, base int) string
+func IsGraphic(r rune) bool
+func IsPrint(r rune) bool
+func Itoa(i int) string
+func ParseBool(str string) (bool, error)
+func ParseComplex(s string, bitSize int) (complex128, error)
+func ParseFloat(s string, bitSize int) (float64, error)
+[floating-point literals]: https://go.dev/ref/spec#Floating-point_literals
+func ParseInt(s string, base int, bitSize int) (i int64, err error)
+[integer literals]: https://go.dev/ref/spec#Integer_literals
+func ParseUint(s string, base int, bitSize int) (uint64, error)
+func Quote(s string) string
+func QuoteRune(r rune) string
+func QuoteRuneToASCII(r rune) string
+func QuoteRuneToGraphic(r rune) string
+func QuoteToASCII(s string) string
+func QuoteToGraphic(s string) string
+func QuotedPrefix(s string) (string, error)
+func Unquote(s string) (string, error)
+func UnquoteChar(s string, quote byte) (value rune, multibyte bool, tail string, err error)

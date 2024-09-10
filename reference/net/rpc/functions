@@ -1,0 +1,7 @@
+func Accept(lis net.Listener)
+func HandleHTTP()
+func Register(rcvr any) error
+func RegisterName(name string, rcvr any) error
+func ServeCodec(codec ServerCodec)
+func ServeConn(conn io.ReadWriteCloser)
+func ServeRequest(codec ServerCodec) error

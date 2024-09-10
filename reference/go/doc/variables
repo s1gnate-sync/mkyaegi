@@ -1,0 +1,5 @@
+var IllegalPrefixes = []string{
+	"copyright",
+	"all rights",
+	"author",
+}

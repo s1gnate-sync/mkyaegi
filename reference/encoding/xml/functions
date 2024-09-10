@@ -1,0 +1,5 @@
+func Escape(w io.Writer, s []byte)
+func EscapeText(w io.Writer, s []byte) error
+func Marshal(v any) ([]byte, error)
+func MarshalIndent(v any, prefix, indent string) ([]byte, error)
+func Unmarshal(data []byte, v any) error

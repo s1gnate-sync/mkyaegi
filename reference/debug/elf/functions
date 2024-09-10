@@ -1,0 +1,9 @@
+func NewFile(r io.ReaderAt) (*File, error)
+func Open(name string) (*File, error)
+func R_INFO(sym, typ uint32) uint64
+func R_INFO32(sym, typ uint32) uint32
+func R_SYM32(info uint32) uint32
+func R_SYM64(info uint64) uint32
+func R_TYPE32(info uint32) uint32
+func R_TYPE64(info uint64) uint32
+func ST_INFO(bind SymBind, typ SymType) uint8

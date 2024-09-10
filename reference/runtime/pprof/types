@@ -1,0 +1,14 @@
+type LabelSet struct {
+	// Has unexported fields.
+}
+func Labels(args ...string) LabelSet
+type Profile struct {
+	// Has unexported fields.
+}
+func Lookup(name string) *Profile
+func NewProfile(name string) *Profile
+func Profiles() []*Profile
+func (p *Profile) Add(value any, skip int)
+func (p *Profile) Count() int
+func (p *Profile) Name() string
+func (p *Profile) Remove(value any)

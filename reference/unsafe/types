@@ -1,0 +1,5 @@
+type ArbitraryType int
+func Slice(ptr *ArbitraryType, len IntegerType) []ArbitraryType
+func SliceData(slice []ArbitraryType) *ArbitraryType
+type IntegerType int
+type Pointer *ArbitraryType

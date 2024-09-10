@@ -1,0 +1,7 @@
+const (
+	// The ISO polynomial, defined in ISO 3309 and used in HDLC.
+	ISO = 0xD800000000000000
+	// The ECMA polynomial, defined in ECMA 182.
+	ECMA = 0xC96C5795D7870F42
+)
+const Size = 8

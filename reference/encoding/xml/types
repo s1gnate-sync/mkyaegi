@@ -1,0 +1,128 @@
+type Attr struct {
+	Name  Name
+	Value string
+}
+type CharData []byte
+func (c CharData) Copy() CharData
+type Comment []byte
+func (c Comment) Copy() Comment
+type Decoder struct {
+	// Strict defaults to true, enforcing the requirements
+	// of the XML specification.
+	// If set to false, the parser allows input containing common
+	// mistakes:
+	//	* If an element is missing an end tag, the parser invents
+	//	  end tags as necessary to keep the return values from Token
+	//	  properly balanced.
+	//	* In attribute values and character data, unknown or malformed
+	//	  character entities (sequences beginning with &) are left alone.
+	//
+	// Setting:
+	//
+	//	d.Strict = false
+	//	d.AutoClose = xml.HTMLAutoClose
+	//	d.Entity = xml.HTMLEntity
+	//
+	// creates a parser that can handle typical HTML.
+	//
+	// Strict mode does not enforce the requirements of the XML name spaces TR.
+	// In particular it does not reject name space tags using undefined prefixes.
+	// Such tags are recorded with the unknown prefix as the name space URL.
+	Strict bool
+	// When Strict == false, AutoClose indicates a set of elements to
+	// consider closed immediately after they are opened, regardless
+	// of whether an end element is present.
+	AutoClose []string
+	// Entity can be used to map non-standard entity names to string replacements.
+	// The parser behaves as if these standard mappings are present in the map,
+	// regardless of the actual map content:
+	//
+	//	"lt": "<",
+	//	"gt": ">",
+	//	"amp": "&",
+	//	"apos": "'",
+	//	"quot": `"`,
+	Entity map[string]string
+	// CharsetReader, if non-nil, defines a function to generate
+	// charset-conversion readers, converting from the provided
+	// non-UTF-8 charset into UTF-8. If CharsetReader is nil or
+	// returns an error, parsing stops with an error. One of the
+	// CharsetReader's result values must be non-nil.
+	CharsetReader func(charset string, input io.Reader) (io.Reader, error)
+	// DefaultSpace sets the default name space used for unadorned tags,
+	// as if the entire XML stream were wrapped in an element containing
+	// the attribute xmlns="DefaultSpace".
+	DefaultSpace string
+	// Has unexported fields.
+}
+func NewDecoder(r io.Reader) *Decoder
+func NewTokenDecoder(t TokenReader) *Decoder
+func (d *Decoder) Decode(v any) error
+func (d *Decoder) DecodeElement(v any, start *StartElement) error
+func (d *Decoder) InputOffset() int64
+func (d *Decoder) InputPos() (line, column int)
+func (d *Decoder) RawToken() (Token, error)
+func (d *Decoder) Skip() error
+func (d *Decoder) Token() (Token, error)
+type Directive []byte
+func (d Directive) Copy() Directive
+type Encoder struct {
+	// Has unexported fields.
+}
+func NewEncoder(w io.Writer) *Encoder
+func (enc *Encoder) Close() error
+func (enc *Encoder) Encode(v any) error
+func (enc *Encoder) EncodeElement(v any, start StartElement) error
+func (enc *Encoder) EncodeToken(t Token) error
+func (enc *Encoder) Flush() error
+func (enc *Encoder) Indent(prefix, indent string)
+type EndElement struct {
+	Name Name
+}
+type Marshaler interface {
+	MarshalXML(e *Encoder, start StartElement) error
+}
+type MarshalerAttr interface {
+	MarshalXMLAttr(name Name) (Attr, error)
+}
+type Name struct {
+	Space, Local string
+}
+type ProcInst struct {
+	Target string
+	Inst   []byte
+}
+func (p ProcInst) Copy() ProcInst
+type StartElement struct {
+	Name Name
+	Attr []Attr
+}
+func (e StartElement) Copy() StartElement
+func (e StartElement) End() EndElement
+type SyntaxError struct {
+	Msg  string
+	Line int
+}
+func (e *SyntaxError) Error() string
+type TagPathError struct {
+	Struct       reflect.Type
+	Field1, Tag1 string
+	Field2, Tag2 string
+}
+func (e *TagPathError) Error() string
+type Token any
+func CopyToken(t Token) Token
+type TokenReader interface {
+	Token() (Token, error)
+}
+type UnmarshalError string
+func (e UnmarshalError) Error() string
+type Unmarshaler interface {
+	UnmarshalXML(d *Decoder, start StartElement) error
+}
+type UnmarshalerAttr interface {
+	UnmarshalXMLAttr(attr Attr) error
+}
+type UnsupportedTypeError struct {
+	Type reflect.Type
+}

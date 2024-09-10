@@ -1,0 +1,17 @@
+type ParameterSizes int
+const (
+	L1024N160 ParameterSizes = iota
+	L2048N224
+	L2048N256
+	L3072N256
+)
+type Parameters struct {
+	P, Q, G *big.Int
+}
+type PrivateKey struct {
+	PublicKey
+	X *big.Int
+}
+type PublicKey struct {
+	Parameters
+	Y *big.Int

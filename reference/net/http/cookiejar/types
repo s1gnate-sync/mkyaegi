@@ -1,0 +1,26 @@
+type Jar struct {
+	// Has unexported fields.
+}
+func New(o *Options) (*Jar, error)
+func (j *Jar) Cookies(u *url.URL) (cookies []*http.Cookie)
+func (j *Jar) SetCookies(u *url.URL, cookies []*http.Cookie)
+type Options struct {
+	// PublicSuffixList is the public suffix list that determines whether
+	// an HTTP server can set a cookie for a domain.
+	//
+	// A nil value is valid and may be useful for testing but it is not
+	// secure: it means that the HTTP server for foo.co.uk can set a cookie
+	// for bar.co.uk.
+	PublicSuffixList PublicSuffixList
+}
+type PublicSuffixList interface {
+	// PublicSuffix returns the public suffix of domain.
+	//
+	// TODO: specify which of the caller and callee is responsible for IP
+	// addresses, for leading and trailing dots, for case sensitivity, and
+	// for IDN/Punycode.
+	PublicSuffix(domain string) string
+	// String returns a description of the source of this public suffix
+	// list. The description will typically contain something like a time
+	// stamp or version number.
+	String() string

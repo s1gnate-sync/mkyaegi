@@ -1,0 +1,17 @@
+func Find(n int, cmp func(int) int) (i int, found bool)
+func Float64s(x []float64)
+func Float64sAreSorted(x []float64) bool
+func Ints(x []int)
+func IntsAreSorted(x []int) bool
+func IsSorted(data Interface) bool
+func Search(n int, f func(int) bool) int
+func SearchFloat64s(a []float64, x float64) int
+func SearchInts(a []int, x int) int
+func SearchStrings(a []string, x string) int
+func Slice(x any, less func(i, j int) bool)
+func SliceIsSorted(x any, less func(i, j int) bool) bool
+func SliceStable(x any, less func(i, j int) bool)
+func Sort(data Interface)
+func Stable(data Interface)
+func Strings(x []string)
+func StringsAreSorted(x []string) bool

@@ -1,0 +1,1 @@
+func PrintError(w io.Writer, err error)

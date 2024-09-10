@@ -1,0 +1,1 @@
+func DefaultLookupPackage(name string) (importPath string, ok bool)

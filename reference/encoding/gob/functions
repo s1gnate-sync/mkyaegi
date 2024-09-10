@@ -1,0 +1,2 @@
+func Register(value any)
+func RegisterName(name string, value any)

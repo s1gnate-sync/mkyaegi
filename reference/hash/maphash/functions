@@ -1,0 +1,2 @@
+func Bytes(seed Seed, b []byte) uint64
+func String(seed Seed, s string) uint64

@@ -1,0 +1,3 @@
+const Compiler = "gc"
+const GOARCH string = goarch.GOARCH
+const GOOS string = goos.GOOS

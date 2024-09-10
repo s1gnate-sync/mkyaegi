@@ -1,0 +1,3 @@
+var ErrTimeout = errors.New("timeout")
+var ErrTimeoutUnsupported = errors.New("timeout is not supported in accessible mode")
+var ErrUserAborted = errors.New("user aborted")

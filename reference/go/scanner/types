@@ -1,0 +1,26 @@
+type Error struct {
+	Pos token.Position
+	Msg string
+}
+func (e Error) Error() string
+type ErrorHandler func(pos token.Position, msg string)
+type ErrorList []*Error
+func (p *ErrorList) Add(pos token.Position, msg string)
+func (p ErrorList) Err() error
+func (p ErrorList) Error() string
+func (p ErrorList) Len() int
+func (p ErrorList) Less(i, j int) bool
+func (p *ErrorList) RemoveMultiples()
+func (p *ErrorList) Reset()
+func (p ErrorList) Sort()
+func (p ErrorList) Swap(i, j int)
+type Mode uint
+const (
+	ScanComments Mode = 1 << iota // return comments as COMMENT tokens
+)
+type Scanner struct {
+	// public state - ok to modify
+	ErrorCount int // number of errors encountered
+	// Has unexported fields.
+}
+func (s *Scanner) Init(file *token.File, src []byte, err ErrorHandler, mode Mode)

@@ -1,0 +1,40 @@
+type Group struct {
+	Gid  string // group ID
+	Name string // group name
+}
+func LookupGroup(name string) (*Group, error)
+func LookupGroupId(gid string) (*Group, error)
+type UnknownGroupError string
+func (e UnknownGroupError) Error() string
+type UnknownGroupIdError string
+func (e UnknownGroupIdError) Error() string
+type UnknownUserError string
+func (e UnknownUserError) Error() string
+type UnknownUserIdError int
+func (e UnknownUserIdError) Error() string
+type User struct {
+	// Uid is the user ID.
+	// On POSIX systems, this is a decimal number representing the uid.
+	// On Windows, this is a security identifier (SID) in a string format.
+	// On Plan 9, this is the contents of /dev/user.
+	Uid string
+	// Gid is the primary group ID.
+	// On POSIX systems, this is a decimal number representing the gid.
+	// On Windows, this is a SID in a string format.
+	// On Plan 9, this is the contents of /dev/user.
+	Gid string
+	// Username is the login name.
+	Username string
+	// Name is the user's real or display name.
+	// It might be blank.
+	// On POSIX systems, this is the first (or only) entry in the GECOS field
+	// list.
+	// On Windows, this is the user's display name.
+	// On Plan 9, this is the contents of /dev/user.
+	Name string
+	// HomeDir is the path to the user's home directory (if they have one).
+	HomeDir string
+}
+func Current() (*User, error)
+func Lookup(username string) (*User, error)
+func LookupId(uid string) (*User, error)

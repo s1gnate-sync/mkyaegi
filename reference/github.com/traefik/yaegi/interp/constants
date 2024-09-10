@@ -1,0 +1,10 @@
+const (
+	// DefaultSourceName is the name used by default when the name of the input
+	// source file has not been specified for an Eval.
+	// TODO(mpl): something even more special as a name?
+	DefaultSourceName = "_.go"
+	// Test is the value to pass to EvalPath to activate evaluation of test functions.
+	Test = false
+	// NoTest is the value to pass to EvalPath to skip evaluation of test functions.
+	NoTest = true
+)

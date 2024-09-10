@@ -1,0 +1,3 @@
+func Checksum(data []byte, tab *Table) uint64
+func New(tab *Table) hash.Hash64
+func Update(crc uint64, tab *Table, p []byte) uint64

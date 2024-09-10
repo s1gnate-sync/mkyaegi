@@ -1,0 +1,3 @@
+func Request() (*http.Request, error)
+func RequestFromMap(params map[string]string) (*http.Request, error)
+func Serve(handler http.Handler) error

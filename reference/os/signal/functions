@@ -1,0 +1,5 @@
+func Ignore(sig ...os.Signal)
+func Ignored(sig os.Signal) bool
+func Notify(c chan<- os.Signal, sig ...os.Signal)
+func NotifyContext(parent context.Context, signals ...os.Signal) (ctx context.Context, stop context.CancelFunc)
+func Reset(sig ...os.Signal)

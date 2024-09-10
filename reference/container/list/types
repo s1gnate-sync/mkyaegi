@@ -1,0 +1,25 @@
+type Element struct {
+	// The value stored with this element.
+	Value any
+	// Has unexported fields.
+}
+func (e *Element) Next() *Element
+func (e *Element) Prev() *Element
+type List struct {
+	// Has unexported fields.
+}
+func New() *List
+func (l *List) Back() *Element
+func (l *List) Front() *Element
+func (l *List) Init() *List
+func (l *List) InsertAfter(v any, mark *Element) *Element
+func (l *List) InsertBefore(v any, mark *Element) *Element
+func (l *List) Len() int
+func (l *List) MoveAfter(e, mark *Element)
+func (l *List) MoveBefore(e, mark *Element)
+func (l *List) MoveToBack(e *Element)
+func (l *List) MoveToFront(e *Element)
+func (l *List) PushBack(v any) *Element
+func (l *List) PushBackList(other *List)
+func (l *List) PushFront(v any) *Element
+func (l *List) PushFrontList(other *List)

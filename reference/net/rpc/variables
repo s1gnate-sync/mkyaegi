@@ -1,0 +1,2 @@
+var DefaultServer = NewServer()
+var ErrShutdown = errors.New("connection is shut down")

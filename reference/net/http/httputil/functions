@@ -1,0 +1,5 @@
+func DumpRequest(req *http.Request, body bool) ([]byte, error)
+func DumpRequestOut(req *http.Request, body bool) ([]byte, error)
+func DumpResponse(resp *http.Response, body bool) ([]byte, error)
+func NewChunkedReader(r io.Reader) io.Reader
+func NewChunkedWriter(w io.Writer) io.WriteCloser

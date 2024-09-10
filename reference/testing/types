@@ -1,0 +1,154 @@
+type B struct {
+	N int
+	// Has unexported fields.
+}
+func (c *B) Cleanup(f func())
+func (b *B) Elapsed() time.Duration
+func (c *B) Error(args ...any)
+func (c *B) Errorf(format string, args ...any)
+func (c *B) Fail()
+func (c *B) FailNow()
+func (c *B) Failed() bool
+func (c *B) Fatal(args ...any)
+func (c *B) Fatalf(format string, args ...any)
+func (c *B) Helper()
+func (c *B) Log(args ...any)
+func (c *B) Logf(format string, args ...any)
+func (c *B) Name() string
+func (b *B) ReportAllocs()
+func (b *B) ReportMetric(n float64, unit string)
+func (b *B) ResetTimer()
+func (b *B) Run(name string, f func(b *B)) bool
+func (b *B) RunParallel(body func(*PB))
+func (b *B) SetBytes(n int64)
+func (b *B) SetParallelism(p int)
+func (c *B) Setenv(key, value string)
+func (c *B) Skip(args ...any)
+func (c *B) SkipNow()
+func (c *B) Skipf(format string, args ...any)
+func (c *B) Skipped() bool
+func (b *B) StartTimer()
+func (b *B) StopTimer()
+func (c *B) TempDir() string
+type BenchmarkResult struct {
+	N         int           // The number of iterations.
+	T         time.Duration // The total time taken.
+	Bytes     int64         // Bytes processed in one iteration.
+	MemAllocs uint64        // The total number of memory allocations.
+	MemBytes  uint64        // The total number of bytes allocated.
+	// Extra records additional metrics reported by ReportMetric.
+	Extra map[string]float64
+}
+func Benchmark(f func(b *B)) BenchmarkResult
+func (r BenchmarkResult) AllocedBytesPerOp() int64
+func (r BenchmarkResult) AllocsPerOp() int64
+func (r BenchmarkResult) MemString() string
+func (r BenchmarkResult) NsPerOp() int64
+func (r BenchmarkResult) String() string
+type Cover struct {
+	Mode            string
+	Counters        map[string][]uint32
+	Blocks          map[string][]CoverBlock
+	CoveredPackages string
+}
+type CoverBlock struct {
+	Line0 uint32 // Line number for block start.
+	Col0  uint16 // Column number for block start.
+	Line1 uint32 // Line number for block end.
+	Col1  uint16 // Column number for block end.
+	Stmts uint16 // Number of statements included in this block.
+}
+type F struct {
+	// Has unexported fields.
+}
+func (f *F) Add(args ...any)
+func (c *F) Cleanup(f func())
+func (c *F) Error(args ...any)
+func (c *F) Errorf(format string, args ...any)
+func (f *F) Fail()
+func (c *F) FailNow()
+func (c *F) Failed() bool
+func (c *F) Fatal(args ...any)
+func (c *F) Fatalf(format string, args ...any)
+func (f *F) Fuzz(ff any)
+func (f *F) Helper()
+func (c *F) Log(args ...any)
+func (c *F) Logf(format string, args ...any)
+func (c *F) Name() string
+func (c *F) Setenv(key, value string)
+func (c *F) Skip(args ...any)
+func (c *F) SkipNow()
+func (c *F) Skipf(format string, args ...any)
+func (f *F) Skipped() bool
+func (c *F) TempDir() string
+type InternalBenchmark struct {
+	Name string
+	F    func(b *B)
+}
+type InternalExample struct {
+	Name      string
+	F         func()
+	Output    string
+	Unordered bool
+}
+type InternalFuzzTarget struct {
+	Name string
+	Fn   func(f *F)
+}
+type InternalTest struct {
+	Name string
+	F    func(*T)
+}
+type M struct {
+	// Has unexported fields.
+}
+func MainStart(deps testDeps, tests []InternalTest, benchmarks []InternalBenchmark, fuzzTargets []InternalFuzzTarget, examples []InternalExample) *M
+func (m *M) Run() (code int)
+type PB struct {
+	// Has unexported fields.
+}
+func (pb *PB) Next() bool
+type T struct {
+	// Has unexported fields.
+}
+func (c *T) Cleanup(f func())
+func (t *T) Deadline() (deadline time.Time, ok bool)
+func (c *T) Error(args ...any)
+func (c *T) Errorf(format string, args ...any)
+func (c *T) Fail()
+func (c *T) FailNow()
+func (c *T) Failed() bool
+func (c *T) Fatal(args ...any)
+func (c *T) Fatalf(format string, args ...any)
+func (c *T) Helper()
+func (c *T) Log(args ...any)
+func (c *T) Logf(format string, args ...any)
+func (c *T) Name() string
+func (t *T) Parallel()
+func (t *T) Run(name string, f func(t *T)) bool
+func (t *T) Setenv(key, value string)
+func (c *T) Skip(args ...any)
+func (c *T) SkipNow()
+func (c *T) Skipf(format string, args ...any)
+func (c *T) Skipped() bool
+func (c *T) TempDir() string
+type TB interface {
+	Cleanup(func())
+	Error(args ...any)
+	Errorf(format string, args ...any)
+	Fail()
+	FailNow()
+	Failed() bool
+	Fatal(args ...any)
+	Fatalf(format string, args ...any)
+	Helper()
+	Log(args ...any)
+	Logf(format string, args ...any)
+	Name() string
+	Setenv(key, value string)
+	Skip(args ...any)
+	SkipNow()
+	Skipf(format string, args ...any)
+	Skipped() bool
+	TempDir() string
+	// Has unexported methods.

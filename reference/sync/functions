@@ -1,0 +1,3 @@
+func OnceFunc(f func()) func()
+func OnceValue[T any](f func() T) func() T
+func OnceValues[T1, T2 any](f func() (T1, T2)) func() (T1, T2)

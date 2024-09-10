@@ -1,0 +1,16 @@
+const (
+	MaxRune         = '\U0010FFFF' // Maximum valid Unicode code point.
+	ReplacementChar = '\uFFFD'     // Represents invalid code points.
+	MaxASCII        = '\u007F'     // maximum ASCII value.
+	MaxLatin1       = '\u00FF'     // maximum Latin-1 value.
+)
+const (
+	UpperCase = iota
+	LowerCase
+	TitleCase
+	MaxCase
+)
+const (
+	UpperLower = MaxRune + 1 // (Cannot be a valid delta.)
+)
+const Version = "15.0.0"

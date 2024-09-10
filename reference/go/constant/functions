@@ -1,0 +1,11 @@
+func BitLen(x Value) int
+func BoolVal(x Value) bool
+func Bytes(x Value) []byte
+func Compare(x_ Value, op token.Token, y_ Value) bool
+func Float32Val(x Value) (float32, bool)
+func Float64Val(x Value) (float64, bool)
+func Int64Val(x Value) (int64, bool)
+func Sign(x Value) int
+func StringVal(x Value) string
+func Uint64Val(x Value) (uint64, bool)
+func Val(x Value) any

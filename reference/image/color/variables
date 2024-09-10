@@ -1,0 +1,6 @@
+var (
+	Black       = Gray16{0}
+	White       = Gray16{0xffff}
+	Transparent = Alpha16{0}
+	Opaque      = Alpha16{0xffff}
+)

@@ -1,0 +1,6 @@
+var EOF = errors.New("EOF")
+var ErrClosedPipe = errors.New("io: read/write on closed pipe")
+var ErrNoProgress = errors.New("multiple Read calls return no data or error")
+var ErrShortBuffer = errors.New("short buffer")
+var ErrShortWrite = errors.New("short write")
+var ErrUnexpectedEOF = errors.New("unexpected EOF")

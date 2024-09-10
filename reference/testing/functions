@@ -1,0 +1,12 @@
+func AllocsPerRun(runs int, f func()) (avg float64)
+func CoverMode() string
+func Coverage() float64
+func Init()
+func Main(matchString func(pat, str string) (bool, error), tests []InternalTest, benchmarks []InternalBenchmark, examples []InternalExample)
+func RegisterCover(c Cover)
+func RunBenchmarks(matchString func(pat, str string) (bool, error), benchmarks []InternalBenchmark)
+func RunExamples(matchString func(pat, str string) (bool, error), examples []InternalExample) (ok bool)
+func RunTests(matchString func(pat, str string) (bool, error), tests []InternalTest) (ok bool)
+func Short() bool
+func Testing() bool
+func Verbose() bool

@@ -1,0 +1,7 @@
+func Compact(dst *bytes.Buffer, src []byte) error
+func HTMLEscape(dst *bytes.Buffer, src []byte)
+func Indent(dst *bytes.Buffer, src []byte, prefix, indent string) error
+func Marshal(v any) ([]byte, error)
+func MarshalIndent(v any, prefix, indent string) ([]byte, error)
+func Unmarshal(data []byte, v any) error
+func Valid(data []byte) bool

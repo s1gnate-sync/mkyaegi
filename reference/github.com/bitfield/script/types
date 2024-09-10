@@ -1,0 +1,72 @@
+type Pipe struct {
+	// Reader is the underlying reader.
+	Reader ReadAutoCloser
+	// Has unexported fields.
+}
+func Args() *Pipe
+func Do(req *http.Request) *Pipe
+func Echo(s string) *Pipe
+func Exec(cmdLine string) *Pipe
+func File(path string) *Pipe
+func FindFiles(dir string) *Pipe
+func Get(url string) *Pipe
+func IfExists(path string) *Pipe
+func ListFiles(path string) *Pipe
+func NewPipe() *Pipe
+func Post(url string) *Pipe
+func Slice(s []string) *Pipe
+func Stdin() *Pipe
+func (p *Pipe) AppendFile(path string) (int64, error)
+func (p *Pipe) Basename() *Pipe
+func (p *Pipe) Bytes() ([]byte, error)
+func (p *Pipe) Close() error
+func (p *Pipe) Column(col int) *Pipe
+func (p *Pipe) Concat() *Pipe
+func (p *Pipe) CountLines() (lines int, err error)
+func (p *Pipe) DecodeBase64() *Pipe
+func (p *Pipe) Dirname() *Pipe
+func (p *Pipe) Do(req *http.Request) *Pipe
+func (p *Pipe) EachLine(process func(string, *strings.Builder)) *Pipe
+func (p *Pipe) Echo(s string) *Pipe
+func (p *Pipe) EncodeBase64() *Pipe
+func (p *Pipe) Error() error
+func (p *Pipe) Exec(cmdLine string) *Pipe
+func (p *Pipe) ExecForEach(cmdLine string) *Pipe
+func (p *Pipe) ExitStatus() int
+func (p *Pipe) Filter(filter func(io.Reader, io.Writer) error) *Pipe
+func (p *Pipe) FilterLine(filter func(string) string) *Pipe
+func (p *Pipe) FilterScan(filter func(string, io.Writer)) *Pipe
+func (p *Pipe) First(n int) *Pipe
+func (p *Pipe) Freq() *Pipe
+func (p *Pipe) Get(url string) *Pipe
+func (p *Pipe) JQ(query string) *Pipe
+func (p *Pipe) Join() *Pipe
+func (p *Pipe) Last(n int) *Pipe
+func (p *Pipe) Match(s string) *Pipe
+func (p *Pipe) MatchRegexp(re *regexp.Regexp) *Pipe
+func (p *Pipe) Post(url string) *Pipe
+func (p *Pipe) Read(b []byte) (int, error)
+func (p *Pipe) Reject(s string) *Pipe
+func (p *Pipe) RejectRegexp(re *regexp.Regexp) *Pipe
+func (p *Pipe) Replace(search, replace string) *Pipe
+func (p *Pipe) ReplaceRegexp(re *regexp.Regexp, replace string) *Pipe
+func (p *Pipe) SHA256Sum() (string, error)
+func (p *Pipe) SHA256Sums() *Pipe
+func (p *Pipe) SetError(err error)
+func (p *Pipe) Slice() ([]string, error)
+func (p *Pipe) Stdout() (int, error)
+func (p *Pipe) String() (string, error)
+func (p *Pipe) Tee(writers ...io.Writer) *Pipe
+func (p *Pipe) Wait() error
+func (p *Pipe) WithEnv(env []string) *Pipe
+func (p *Pipe) WithError(err error) *Pipe
+func (p *Pipe) WithHTTPClient(c *http.Client) *Pipe
+func (p *Pipe) WithReader(r io.Reader) *Pipe
+func (p *Pipe) WithStderr(w io.Writer) *Pipe
+func (p *Pipe) WithStdout(w io.Writer) *Pipe
+func (p *Pipe) WriteFile(path string) (int64, error)
+type ReadAutoCloser struct {
+	// Has unexported fields.
+}
+func NewReadAutoCloser(r io.Reader) ReadAutoCloser
+func (ra ReadAutoCloser) Close() error

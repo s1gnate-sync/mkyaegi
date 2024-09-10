@@ -1,0 +1,2 @@
+func RegisterCompressor(method uint16, comp Compressor)
+func RegisterDecompressor(method uint16, dcomp Decompressor)

@@ -1,0 +1,3 @@
+var BigEndian bigEndian
+var LittleEndian littleEndian
+var NativeEndian nativeEndian

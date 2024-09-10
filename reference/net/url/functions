@@ -1,0 +1,5 @@
+func JoinPath(base string, elem ...string) (result string, err error)
+func PathEscape(s string) string
+func PathUnescape(s string) (string, error)
+func QueryEscape(s string) string
+func QueryUnescape(s string) (string, error)

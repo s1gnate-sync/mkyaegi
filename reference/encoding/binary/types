@@ -1,0 +1,14 @@
+type AppendByteOrder interface {
+	AppendUint16([]byte, uint16) []byte
+	AppendUint32([]byte, uint32) []byte
+	AppendUint64([]byte, uint64) []byte
+	String() string
+}
+type ByteOrder interface {
+	Uint16([]byte) uint16
+	Uint32([]byte) uint32
+	Uint64([]byte) uint64
+	PutUint16([]byte, uint16)
+	PutUint32([]byte, uint32)
+	PutUint64([]byte, uint64)
+	String() string

@@ -1,16 +1,16 @@
 cflags ?= -l -B
 ldflags ?= -w -s
 
-yaegi:
-	CGO_ENABLED=0 go build -a -trimpath -gcflags=all="$(cflags)" -ldflags="$(ldflags)" yaegi.go
+cmd:
+	CGO_ENABLED=0 go build -a -trimpath -gcflags=all="$(cflags)" -ldflags="$(ldflags)" cmd/yaegi.go
 
-generate: extract lib/go1.23-generate.go
-	go generate lib/go1.23-generate.go
+lib:
+	GOBIN=$(PWD)/tools test -e tools/extract || go install github.com/traefik/yaegi/internal/cmd/extract@latest
+	PATH="$(PWD)/tools:$(PATH)" go generate -x lib/go1.23-generate.go
 
-extract:
-	GOBIN=$(PWD) go install github.com/traefik/yaegi/internal/cmd/extract@latest
+ref:
+	tools/gen-reference
 
-yaegi0: yaegi
-	upx --best -o yaegi0 yaegi
+all: lib cmd ref	
 
-.PHONY: generate yaegi yaegi0 extract 
+.PHONY: all cmd lib ref

@@ -1,0 +1,16 @@
+type CommentedNode struct {
+	Node     any // *ast.File, or ast.Expr, ast.Decl, ast.Spec, or ast.Stmt
+	Comments []*ast.CommentGroup
+}
+type Config struct {
+	Mode     Mode // default: 0
+	Tabwidth int  // default: 8
+	Indent   int  // default: 0 (all code is indented at least by this much)
+}
+func (cfg *Config) Fprint(output io.Writer, fset *token.FileSet, node any) error
+type Mode uint
+const (
+	RawFormat Mode = 1 << iota // do not use a tabwriter; if set, UseSpaces is ignored
+	TabIndent                  // use tabs for indentation independent of UseSpaces
+	UseSpaces                  // use spaces instead of tabs for alignment
+	SourcePos                  // emit //line directives to preserve original source positions

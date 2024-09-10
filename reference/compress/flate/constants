@@ -1,0 +1,16 @@
+const (
+	NoCompression      = 0
+	BestSpeed          = 1
+	BestCompression    = 9
+	DefaultCompression = -1
+	// HuffmanOnly disables Lempel-Ziv match searching and only performs Huffman
+	// entropy encoding. This mode is useful in compressing data that has
+	// already been compressed with an LZ style algorithm (e.g. Snappy or LZ4)
+	// that lacks an entropy encoder. Compression gains are achieved when
+	// certain bytes in the input stream occur more frequently than others.
+	//
+	// Note that HuffmanOnly produces a compressed output that is
+	// RFC 1951 compliant. That is, any valid DEFLATE decompressor will
+	// continue to be able to decompress this output.
+	HuffmanOnly = -2
+)

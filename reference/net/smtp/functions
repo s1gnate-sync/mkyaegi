@@ -1,0 +1,1 @@
+func SendMail(addr string, a Auth, from string, to []string, msg []byte) error

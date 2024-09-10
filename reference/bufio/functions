@@ -1,0 +1,4 @@
+func ScanBytes(data []byte, atEOF bool) (advance int, token []byte, err error)
+func ScanLines(data []byte, atEOF bool) (advance int, token []byte, err error)
+func ScanRunes(data []byte, atEOF bool) (advance int, token []byte, err error)
+func ScanWords(data []byte, atEOF bool) (advance int, token []byte, err error)

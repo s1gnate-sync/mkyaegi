@@ -1,0 +1,12 @@
+func FreeOSMemory()
+func PrintStack()
+func ReadGCStats(stats *GCStats)
+func SetCrashOutput(f *os.File, opts CrashOptions) error
+func SetGCPercent(percent int) int
+func SetMaxStack(bytes int) int
+func SetMaxThreads(threads int) int
+func SetMemoryLimit(limit int64) int64
+func SetPanicOnFault(enabled bool) bool
+func SetTraceback(level string)
+func Stack() []byte
+func WriteHeapDump(fd uintptr)

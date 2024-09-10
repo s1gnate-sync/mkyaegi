@@ -1,0 +1,3 @@
+var ErrDot = errors.New("cannot run executable found relative to current directory")
+var ErrNotFound = errors.New("executable file not found in $PATH")
+var ErrWaitDelay = errors.New("exec: WaitDelay expired before I/O complete")

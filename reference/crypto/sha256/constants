@@ -1,0 +1,3 @@
+const BlockSize = 64
+const Size = 32
+const Size224 = 28

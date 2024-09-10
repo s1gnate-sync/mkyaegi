@@ -1,0 +1,2 @@
+func ArchChar(goarch string) (string, error)
+func IsLocalImport(path string) bool

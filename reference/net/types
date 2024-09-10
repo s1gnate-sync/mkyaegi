@@ -1,0 +1,588 @@
+type Addr interface {
+	Network() string // name of the network (for example, "tcp", "udp")
+	String() string  // string form of address (for example, "192.0.2.1:25", "[2001:db8::1]:80")
+}
+type AddrError struct {
+	Err  string
+	Addr string
+}
+func (e *AddrError) Error() string
+func (e *AddrError) Temporary() bool
+func (e *AddrError) Timeout() bool
+type Buffers [][]byte
+func (v *Buffers) Read(p []byte) (n int, err error)
+func (v *Buffers) WriteTo(w io.Writer) (n int64, err error)
+type Conn interface {
+	// Read reads data from the connection.
+	// Read can be made to time out and return an error after a fixed
+	// time limit; see SetDeadline and SetReadDeadline.
+	Read(b []byte) (n int, err error)
+	// Write writes data to the connection.
+	// Write can be made to time out and return an error after a fixed
+	// time limit; see SetDeadline and SetWriteDeadline.
+	Write(b []byte) (n int, err error)
+	// Close closes the connection.
+	// Any blocked Read or Write operations will be unblocked and return errors.
+	Close() error
+	// LocalAddr returns the local network address, if known.
+	LocalAddr() Addr
+	// RemoteAddr returns the remote network address, if known.
+	RemoteAddr() Addr
+	// SetDeadline sets the read and write deadlines associated
+	// with the connection. It is equivalent to calling both
+	// SetReadDeadline and SetWriteDeadline.
+	//
+	// A deadline is an absolute time after which I/O operations
+	// fail instead of blocking. The deadline applies to all future
+	// and pending I/O, not just the immediately following call to
+	// Read or Write. After a deadline has been exceeded, the
+	// connection can be refreshed by setting a deadline in the future.
+	//
+	// If the deadline is exceeded a call to Read or Write or to other
+	// I/O methods will return an error that wraps os.ErrDeadlineExceeded.
+	// This can be tested using errors.Is(err, os.ErrDeadlineExceeded).
+	// The error's Timeout method will return true, but note that there
+	// are other possible errors for which the Timeout method will
+	// return true even if the deadline has not been exceeded.
+	//
+	// An idle timeout can be implemented by repeatedly extending
+	// the deadline after successful Read or Write calls.
+	//
+	// A zero value for t means I/O operations will not time out.
+	SetDeadline(t time.Time) error
+	// SetReadDeadline sets the deadline for future Read calls
+	// and any currently-blocked Read call.
+	// A zero value for t means Read will not time out.
+	SetReadDeadline(t time.Time) error
+	// SetWriteDeadline sets the deadline for future Write calls
+	// and any currently-blocked Write call.
+	// Even if write times out, it may return n > 0, indicating that
+	// some of the data was successfully written.
+	// A zero value for t means Write will not time out.
+	SetWriteDeadline(t time.Time) error
+}
+type DNSConfigError struct {
+	Err error
+}
+func (e *DNSConfigError) Error() string
+func (e *DNSConfigError) Temporary() bool
+func (e *DNSConfigError) Timeout() bool
+func (e *DNSConfigError) Unwrap() error
+type DNSError struct {
+	UnwrapErr   error  // error returned by the [DNSError.Unwrap] method, might be nil
+	Err         string // description of the error
+	Name        string // name looked for
+	Server      string // server used
+	IsTimeout   bool   // if true, timed out; not all timeouts set this
+	IsTemporary bool   // if true, error is temporary; not all errors set this
+	// IsNotFound is set to true when the requested name does not
+	// contain any records of the requested type (data not found),
+	// or the name itself was not found (NXDOMAIN).
+	IsNotFound bool
+}
+func (e *DNSError) Error() string
+func (e *DNSError) Temporary() bool
+func (e *DNSError) Timeout() bool
+func (e *DNSError) Unwrap() error
+type Dialer struct {
+	// Timeout is the maximum amount of time a dial will wait for
+	// a connect to complete. If Deadline is also set, it may fail
+	// earlier.
+	//
+	// The default is no timeout.
+	//
+	// When using TCP and dialing a host name with multiple IP
+	// addresses, the timeout may be divided between them.
+	//
+	// With or without a timeout, the operating system may impose
+	// its own earlier timeout. For instance, TCP timeouts are
+	// often around 3 minutes.
+	Timeout time.Duration
+	// Deadline is the absolute point in time after which dials
+	// will fail. If Timeout is set, it may fail earlier.
+	// Zero means no deadline, or dependent on the operating system
+	// as with the Timeout option.
+	Deadline time.Time
+	// LocalAddr is the local address to use when dialing an
+	// address. The address must be of a compatible type for the
+	// network being dialed.
+	// If nil, a local address is automatically chosen.
+	LocalAddr Addr
+	// DualStack previously enabled RFC 6555 Fast Fallback
+	// support, also known as "Happy Eyeballs", in which IPv4 is
+	// tried soon if IPv6 appears to be misconfigured and
+	// hanging.
+	//
+	// Deprecated: Fast Fallback is enabled by default. To
+	// disable, set FallbackDelay to a negative value.
+	DualStack bool
+	// FallbackDelay specifies the length of time to wait before
+	// spawning a RFC 6555 Fast Fallback connection. That is, this
+	// is the amount of time to wait for IPv6 to succeed before
+	// assuming that IPv6 is misconfigured and falling back to
+	// IPv4.
+	//
+	// If zero, a default delay of 300ms is used.
+	// A negative value disables Fast Fallback support.
+	FallbackDelay time.Duration
+	// KeepAlive specifies the interval between keep-alive
+	// probes for an active network connection.
+	//
+	// KeepAlive is ignored if KeepAliveConfig.Enable is true.
+	//
+	// If zero, keep-alive probes are sent with a default value
+	// (currently 15 seconds), if supported by the protocol and operating
+	// system. Network protocols or operating systems that do
+	// not support keep-alive ignore this field.
+	// If negative, keep-alive probes are disabled.
+	KeepAlive time.Duration
+	// KeepAliveConfig specifies the keep-alive probe configuration
+	// for an active network connection, when supported by the
+	// protocol and operating system.
+	//
+	// If KeepAliveConfig.Enable is true, keep-alive probes are enabled.
+	// If KeepAliveConfig.Enable is false and KeepAlive is negative,
+	// keep-alive probes are disabled.
+	KeepAliveConfig KeepAliveConfig
+	// Resolver optionally specifies an alternate resolver to use.
+	Resolver *Resolver
+	// Cancel is an optional channel whose closure indicates that
+	// the dial should be canceled. Not all types of dials support
+	// cancellation.
+	//
+	// Deprecated: Use DialContext instead.
+	Cancel <-chan struct{}
+	// If Control is not nil, it is called after creating the network
+	// connection but before actually dialing.
+	//
+	// Network and address parameters passed to Control function are not
+	// necessarily the ones passed to Dial. For example, passing "tcp" to Dial
+	// will cause the Control function to be called with "tcp4" or "tcp6".
+	//
+	// Control is ignored if ControlContext is not nil.
+	Control func(network, address string, c syscall.RawConn) error
+	// If ControlContext is not nil, it is called after creating the network
+	// connection but before actually dialing.
+	//
+	// Network and address parameters passed to ControlContext function are not
+	// necessarily the ones passed to Dial. For example, passing "tcp" to Dial
+	// will cause the ControlContext function to be called with "tcp4" or "tcp6".
+	//
+	// If ControlContext is not nil, Control is ignored.
+	ControlContext func(ctx context.Context, network, address string, c syscall.RawConn) error
+	// Has unexported fields.
+}
+func (d *Dialer) Dial(network, address string) (Conn, error)
+func (d *Dialer) DialContext(ctx context.Context, network, address string) (Conn, error)
+func (d *Dialer) MultipathTCP() bool
+func (d *Dialer) SetMultipathTCP(use bool)
+type Error interface {
+	error
+	Timeout() bool // Is the error a timeout?
+	// Deprecated: Temporary errors are not well-defined.
+	// Most "temporary" errors are timeouts, and the few exceptions are surprising.
+	// Do not use this method.
+	Temporary() bool
+}
+type Flags uint
+const (
+	FlagUp           Flags = 1 << iota // interface is administratively up
+	FlagBroadcast                      // interface supports broadcast access capability
+	FlagLoopback                       // interface is a loopback interface
+	FlagPointToPoint                   // interface belongs to a point-to-point link
+	FlagMulticast                      // interface supports multicast access capability
+	FlagRunning                        // interface is in running state
+)
+func (f Flags) String() string
+type HardwareAddr []byte
+func (a HardwareAddr) String() string
+type IP []byte
+func IPv4(a, b, c, d byte) IP
+func ParseIP(s string) IP
+func (ip IP) DefaultMask() IPMask
+func (ip IP) Equal(x IP) bool
+func (ip IP) IsGlobalUnicast() bool
+func (ip IP) IsInterfaceLocalMulticast() bool
+func (ip IP) IsLinkLocalMulticast() bool
+func (ip IP) IsLinkLocalUnicast() bool
+func (ip IP) IsLoopback() bool
+func (ip IP) IsMulticast() bool
+func (ip IP) IsPrivate() bool
+func (ip IP) IsUnspecified() bool
+func (ip IP) MarshalText() ([]byte, error)
+func (ip IP) Mask(mask IPMask) IP
+func (ip IP) String() string
+func (ip IP) To16() IP
+func (ip IP) To4() IP
+func (ip *IP) UnmarshalText(text []byte) error
+type IPAddr struct {
+	IP   IP
+	Zone string // IPv6 scoped addressing zone
+}
+func (a *IPAddr) Network() string
+func (a *IPAddr) String() string
+type IPConn struct {
+	// Has unexported fields.
+}
+func (c *IPConn) Close() error
+func (c *IPConn) File() (f *os.File, err error)
+func (c *IPConn) LocalAddr() Addr
+func (c *IPConn) Read(b []byte) (int, error)
+func (c *IPConn) ReadFrom(b []byte) (int, Addr, error)
+func (c *IPConn) ReadFromIP(b []byte) (int, *IPAddr, error)
+func (c *IPConn) ReadMsgIP(b, oob []byte) (n, oobn, flags int, addr *IPAddr, err error)
+func (c *IPConn) RemoteAddr() Addr
+func (c *IPConn) SetDeadline(t time.Time) error
+func (c *IPConn) SetReadBuffer(bytes int) error
+func (c *IPConn) SetReadDeadline(t time.Time) error
+func (c *IPConn) SetWriteBuffer(bytes int) error
+func (c *IPConn) SetWriteDeadline(t time.Time) error
+func (c *IPConn) SyscallConn() (syscall.RawConn, error)
+func (c *IPConn) Write(b []byte) (int, error)
+func (c *IPConn) WriteMsgIP(b, oob []byte, addr *IPAddr) (n, oobn int, err error)
+func (c *IPConn) WriteTo(b []byte, addr Addr) (int, error)
+func (c *IPConn) WriteToIP(b []byte, addr *IPAddr) (int, error)
+type IPMask []byte
+func CIDRMask(ones, bits int) IPMask
+func IPv4Mask(a, b, c, d byte) IPMask
+func (m IPMask) Size() (ones, bits int)
+func (m IPMask) String() string
+type IPNet struct {
+	IP   IP     // network number
+	Mask IPMask // network mask
+}
+func (n *IPNet) Contains(ip IP) bool
+func (n *IPNet) Network() string
+func (n *IPNet) String() string
+type Interface struct {
+	Index        int          // positive integer that starts at one, zero is never used
+	MTU          int          // maximum transmission unit
+	Name         string       // e.g., "en0", "lo0", "eth0.100"
+	HardwareAddr HardwareAddr // IEEE MAC-48, EUI-48 and EUI-64 form
+	Flags        Flags        // e.g., FlagUp, FlagLoopback, FlagMulticast
+}
+func (ifi *Interface) Addrs() ([]Addr, error)
+func (ifi *Interface) MulticastAddrs() ([]Addr, error)
+type InvalidAddrError string
+func (e InvalidAddrError) Error() string
+func (e InvalidAddrError) Temporary() bool
+func (e InvalidAddrError) Timeout() bool
+type KeepAliveConfig struct {
+	// If Enable is true, keep-alive probes are enabled.
+	Enable bool
+	// Idle is the time that the connection must be idle before
+	// the first keep-alive probe is sent.
+	// If zero, a default value of 15 seconds is used.
+	Idle time.Duration
+	// Interval is the time between keep-alive probes.
+	// If zero, a default value of 15 seconds is used.
+	Interval time.Duration
+	// Count is the maximum number of keep-alive probes that
+	// can go unanswered before dropping a connection.
+	// If zero, a default value of 9 is used.
+	Count int
+}
+type ListenConfig struct {
+	// If Control is not nil, it is called after creating the network
+	// connection but before binding it to the operating system.
+	//
+	// Network and address parameters passed to Control method are not
+	// necessarily the ones passed to Listen. For example, passing "tcp" to
+	// Listen will cause the Control function to be called with "tcp4" or "tcp6".
+	Control func(network, address string, c syscall.RawConn) error
+	// KeepAlive specifies the keep-alive period for network
+	// connections accepted by this listener.
+	//
+	// KeepAlive is ignored if KeepAliveConfig.Enable is true.
+	//
+	// If zero, keep-alive are enabled if supported by the protocol
+	// and operating system. Network protocols or operating systems
+	// that do not support keep-alive ignore this field.
+	// If negative, keep-alive are disabled.
+	KeepAlive time.Duration
+	// KeepAliveConfig specifies the keep-alive probe configuration
+	// for an active network connection, when supported by the
+	// protocol and operating system.
+	//
+	// If KeepAliveConfig.Enable is true, keep-alive probes are enabled.
+	// If KeepAliveConfig.Enable is false and KeepAlive is negative,
+	// keep-alive probes are disabled.
+	KeepAliveConfig KeepAliveConfig
+	// Has unexported fields.
+}
+func (lc *ListenConfig) Listen(ctx context.Context, network, address string) (Listener, error)
+func (lc *ListenConfig) ListenPacket(ctx context.Context, network, address string) (PacketConn, error)
+func (lc *ListenConfig) MultipathTCP() bool
+func (lc *ListenConfig) SetMultipathTCP(use bool)
+type Listener interface {
+	// Accept waits for and returns the next connection to the listener.
+	Accept() (Conn, error)
+	// Close closes the listener.
+	// Any blocked Accept operations will be unblocked and return errors.
+	Close() error
+	// Addr returns the listener's network address.
+	Addr() Addr
+}
+type MX struct {
+	Host string
+	Pref uint16
+}
+type NS struct {
+	Host string
+}
+type OpError struct {
+	// Op is the operation which caused the error, such as
+	// "read" or "write".
+	Op string
+	// Net is the network type on which this error occurred,
+	// such as "tcp" or "udp6".
+	Net string
+	// For operations involving a remote network connection, like
+	// Dial, Read, or Write, Source is the corresponding local
+	// network address.
+	Source Addr
+	// Addr is the network address for which this error occurred.
+	// For local operations, like Listen or SetDeadline, Addr is
+	// the address of the local endpoint being manipulated.
+	// For operations involving a remote network connection, like
+	// Dial, Read, or Write, Addr is the remote address of that
+	// connection.
+	Addr Addr
+	// Err is the error that occurred during the operation.
+	// The Error method panics if the error is nil.
+	Err error
+}
+func (e *OpError) Error() string
+func (e *OpError) Temporary() bool
+func (e *OpError) Timeout() bool
+func (e *OpError) Unwrap() error
+type PacketConn interface {
+	// ReadFrom reads a packet from the connection,
+	// copying the payload into p. It returns the number of
+	// bytes copied into p and the return address that
+	// was on the packet.
+	// It returns the number of bytes read (0 <= n <= len(p))
+	// and any error encountered. Callers should always process
+	// the n > 0 bytes returned before considering the error err.
+	// ReadFrom can be made to time out and return an error after a
+	// fixed time limit; see SetDeadline and SetReadDeadline.
+	ReadFrom(p []byte) (n int, addr Addr, err error)
+	// WriteTo writes a packet with payload p to addr.
+	// WriteTo can be made to time out and return an Error after a
+	// fixed time limit; see SetDeadline and SetWriteDeadline.
+	// On packet-oriented connections, write timeouts are rare.
+	WriteTo(p []byte, addr Addr) (n int, err error)
+	// Close closes the connection.
+	// Any blocked ReadFrom or WriteTo operations will be unblocked and return errors.
+	Close() error
+	// LocalAddr returns the local network address, if known.
+	LocalAddr() Addr
+	// SetDeadline sets the read and write deadlines associated
+	// with the connection. It is equivalent to calling both
+	// SetReadDeadline and SetWriteDeadline.
+	//
+	// A deadline is an absolute time after which I/O operations
+	// fail instead of blocking. The deadline applies to all future
+	// and pending I/O, not just the immediately following call to
+	// Read or Write. After a deadline has been exceeded, the
+	// connection can be refreshed by setting a deadline in the future.
+	//
+	// If the deadline is exceeded a call to Read or Write or to other
+	// I/O methods will return an error that wraps os.ErrDeadlineExceeded.
+	// This can be tested using errors.Is(err, os.ErrDeadlineExceeded).
+	// The error's Timeout method will return true, but note that there
+	// are other possible errors for which the Timeout method will
+	// return true even if the deadline has not been exceeded.
+	//
+	// An idle timeout can be implemented by repeatedly extending
+	// the deadline after successful ReadFrom or WriteTo calls.
+	//
+	// A zero value for t means I/O operations will not time out.
+	SetDeadline(t time.Time) error
+	// SetReadDeadline sets the deadline for future ReadFrom calls
+	// and any currently-blocked ReadFrom call.
+	// A zero value for t means ReadFrom will not time out.
+	SetReadDeadline(t time.Time) error
+	// SetWriteDeadline sets the deadline for future WriteTo calls
+	// and any currently-blocked WriteTo call.
+	// Even if write times out, it may return n > 0, indicating that
+	// some of the data was successfully written.
+	// A zero value for t means WriteTo will not time out.
+	SetWriteDeadline(t time.Time) error
+}
+type ParseError struct {
+	// Type is the type of string that was expected, such as
+	// "IP address", "CIDR address".
+	Type string
+	// Text is the malformed text string.
+	Text string
+}
+func (e *ParseError) Error() string
+func (e *ParseError) Temporary() bool
+func (e *ParseError) Timeout() bool
+type Resolver struct {
+	// PreferGo controls whether Go's built-in DNS resolver is preferred
+	// on platforms where it's available. It is equivalent to setting
+	// GODEBUG=netdns=go, but scoped to just this resolver.
+	PreferGo bool
+	// StrictErrors controls the behavior of temporary errors
+	// (including timeout, socket errors, and SERVFAIL) when using
+	// Go's built-in resolver. For a query composed of multiple
+	// sub-queries (such as an A+AAAA address lookup, or walking the
+	// DNS search list), this option causes such errors to abort the
+	// whole query instead of returning a partial result. This is
+	// not enabled by default because it may affect compatibility
+	// with resolvers that process AAAA queries incorrectly.
+	StrictErrors bool
+	// Dial optionally specifies an alternate dialer for use by
+	// Go's built-in DNS resolver to make TCP and UDP connections
+	// to DNS services. The host in the address parameter will
+	// always be a literal IP address and not a host name, and the
+	// port in the address parameter will be a literal port number
+	// and not a service name.
+	// If the Conn returned is also a PacketConn, sent and received DNS
+	// messages must adhere to RFC 1035 section 4.2.1, "UDP usage".
+	// Otherwise, DNS messages transmitted over Conn must adhere
+	// to RFC 7766 section 5, "Transport Protocol Selection".
+	// If nil, the default dialer is used.
+	Dial func(ctx context.Context, network, address string) (Conn, error)
+	// Has unexported fields.
+}
+func (r *Resolver) LookupAddr(ctx context.Context, addr string) ([]string, error)
+func (r *Resolver) LookupCNAME(ctx context.Context, host string) (string, error)
+func (r *Resolver) LookupHost(ctx context.Context, host string) (addrs []string, err error)
+func (r *Resolver) LookupIP(ctx context.Context, network, host string) ([]IP, error)
+func (r *Resolver) LookupIPAddr(ctx context.Context, host string) ([]IPAddr, error)
+func (r *Resolver) LookupMX(ctx context.Context, name string) ([]*MX, error)
+func (r *Resolver) LookupNS(ctx context.Context, name string) ([]*NS, error)
+func (r *Resolver) LookupNetIP(ctx context.Context, network, host string) ([]netip.Addr, error)
+func (r *Resolver) LookupPort(ctx context.Context, network, service string) (port int, err error)
+func (r *Resolver) LookupSRV(ctx context.Context, service, proto, name string) (string, []*SRV, error)
+func (r *Resolver) LookupTXT(ctx context.Context, name string) ([]string, error)
+type SRV struct {
+	Target   string
+	Port     uint16
+	Priority uint16
+	Weight   uint16
+}
+type TCPAddr struct {
+	IP   IP
+	Port int
+	Zone string // IPv6 scoped addressing zone
+}
+func TCPAddrFromAddrPort(addr netip.AddrPort) *TCPAddr
+func (a *TCPAddr) AddrPort() netip.AddrPort
+func (a *TCPAddr) Network() string
+func (a *TCPAddr) String() string
+type TCPConn struct {
+	// Has unexported fields.
+}
+func (c *TCPConn) Close() error
+func (c *TCPConn) CloseRead() error
+func (c *TCPConn) CloseWrite() error
+func (c *TCPConn) File() (f *os.File, err error)
+func (c *TCPConn) LocalAddr() Addr
+func (c *TCPConn) MultipathTCP() (bool, error)
+func (c *TCPConn) Read(b []byte) (int, error)
+func (c *TCPConn) ReadFrom(r io.Reader) (int64, error)
+func (c *TCPConn) RemoteAddr() Addr
+func (c *TCPConn) SetDeadline(t time.Time) error
+func (c *TCPConn) SetKeepAlive(keepalive bool) error
+func (c *TCPConn) SetKeepAliveConfig(config KeepAliveConfig) error
+func (c *TCPConn) SetKeepAlivePeriod(d time.Duration) error
+func (c *TCPConn) SetLinger(sec int) error
+func (c *TCPConn) SetNoDelay(noDelay bool) error
+func (c *TCPConn) SetReadBuffer(bytes int) error
+func (c *TCPConn) SetReadDeadline(t time.Time) error
+func (c *TCPConn) SetWriteBuffer(bytes int) error
+func (c *TCPConn) SetWriteDeadline(t time.Time) error
+func (c *TCPConn) SyscallConn() (syscall.RawConn, error)
+func (c *TCPConn) Write(b []byte) (int, error)
+func (c *TCPConn) WriteTo(w io.Writer) (int64, error)
+type TCPListener struct {
+	// Has unexported fields.
+}
+func (l *TCPListener) Accept() (Conn, error)
+func (l *TCPListener) AcceptTCP() (*TCPConn, error)
+func (l *TCPListener) Addr() Addr
+func (l *TCPListener) Close() error
+func (l *TCPListener) File() (f *os.File, err error)
+func (l *TCPListener) SetDeadline(t time.Time) error
+func (l *TCPListener) SyscallConn() (syscall.RawConn, error)
+type UDPAddr struct {
+	IP   IP
+	Port int
+	Zone string // IPv6 scoped addressing zone
+}
+func UDPAddrFromAddrPort(addr netip.AddrPort) *UDPAddr
+func (a *UDPAddr) AddrPort() netip.AddrPort
+func (a *UDPAddr) Network() string
+func (a *UDPAddr) String() string
+type UDPConn struct {
+	// Has unexported fields.
+}
+func (c *UDPConn) Close() error
+func (c *UDPConn) File() (f *os.File, err error)
+func (c *UDPConn) LocalAddr() Addr
+func (c *UDPConn) Read(b []byte) (int, error)
+func (c *UDPConn) ReadFrom(b []byte) (int, Addr, error)
+func (c *UDPConn) ReadFromUDP(b []byte) (n int, addr *UDPAddr, err error)
+func (c *UDPConn) ReadFromUDPAddrPort(b []byte) (n int, addr netip.AddrPort, err error)
+func (c *UDPConn) ReadMsgUDP(b, oob []byte) (n, oobn, flags int, addr *UDPAddr, err error)
+func (c *UDPConn) ReadMsgUDPAddrPort(b, oob []byte) (n, oobn, flags int, addr netip.AddrPort, err error)
+func (c *UDPConn) RemoteAddr() Addr
+func (c *UDPConn) SetDeadline(t time.Time) error
+func (c *UDPConn) SetReadBuffer(bytes int) error
+func (c *UDPConn) SetReadDeadline(t time.Time) error
+func (c *UDPConn) SetWriteBuffer(bytes int) error
+func (c *UDPConn) SetWriteDeadline(t time.Time) error
+func (c *UDPConn) SyscallConn() (syscall.RawConn, error)
+func (c *UDPConn) Write(b []byte) (int, error)
+func (c *UDPConn) WriteMsgUDP(b, oob []byte, addr *UDPAddr) (n, oobn int, err error)
+func (c *UDPConn) WriteMsgUDPAddrPort(b, oob []byte, addr netip.AddrPort) (n, oobn int, err error)
+func (c *UDPConn) WriteTo(b []byte, addr Addr) (int, error)
+func (c *UDPConn) WriteToUDP(b []byte, addr *UDPAddr) (int, error)
+func (c *UDPConn) WriteToUDPAddrPort(b []byte, addr netip.AddrPort) (int, error)
+type UnixAddr struct {
+	Name string
+	Net  string
+}
+func (a *UnixAddr) Network() string
+func (a *UnixAddr) String() string
+type UnixConn struct {
+	// Has unexported fields.
+}
+func (c *UnixConn) Close() error
+func (c *UnixConn) CloseRead() error
+func (c *UnixConn) CloseWrite() error
+func (c *UnixConn) File() (f *os.File, err error)
+func (c *UnixConn) LocalAddr() Addr
+func (c *UnixConn) Read(b []byte) (int, error)
+func (c *UnixConn) ReadFrom(b []byte) (int, Addr, error)
+func (c *UnixConn) ReadFromUnix(b []byte) (int, *UnixAddr, error)
+func (c *UnixConn) ReadMsgUnix(b, oob []byte) (n, oobn, flags int, addr *UnixAddr, err error)
+func (c *UnixConn) RemoteAddr() Addr
+func (c *UnixConn) SetDeadline(t time.Time) error
+func (c *UnixConn) SetReadBuffer(bytes int) error
+func (c *UnixConn) SetReadDeadline(t time.Time) error
+func (c *UnixConn) SetWriteBuffer(bytes int) error
+func (c *UnixConn) SetWriteDeadline(t time.Time) error
+func (c *UnixConn) SyscallConn() (syscall.RawConn, error)
+func (c *UnixConn) Write(b []byte) (int, error)
+func (c *UnixConn) WriteMsgUnix(b, oob []byte, addr *UnixAddr) (n, oobn int, err error)
+func (c *UnixConn) WriteTo(b []byte, addr Addr) (int, error)
+func (c *UnixConn) WriteToUnix(b []byte, addr *UnixAddr) (int, error)
+type UnixListener struct {
+	// Has unexported fields.
+}
+func (l *UnixListener) Accept() (Conn, error)
+func (l *UnixListener) AcceptUnix() (*UnixConn, error)
+func (l *UnixListener) Addr() Addr
+func (l *UnixListener) Close() error
+func (l *UnixListener) File() (f *os.File, err error)
+func (l *UnixListener) SetDeadline(t time.Time) error
+func (l *UnixListener) SetUnlinkOnClose(unlink bool)
+func (l *UnixListener) SyscallConn() (syscall.RawConn, error)
+type UnknownNetworkError string
+func (e UnknownNetworkError) Error() string
+func (e UnknownNetworkError) Temporary() bool

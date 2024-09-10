@@ -1,0 +1,3 @@
+func CanonicalMIMEHeaderKey(s string) string
+func TrimBytes(b []byte) []byte
+func TrimString(s string) string

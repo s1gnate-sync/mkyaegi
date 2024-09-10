@@ -1,0 +1,35 @@
+type AndExpr struct {
+	X, Y Expr
+}
+func (x *AndExpr) Eval(ok func(tag string) bool) bool
+func (x *AndExpr) String() string
+type Expr interface {
+	// String returns the string form of the expression,
+	// using the boolean syntax used in //go:build lines.
+	String() string
+	// Eval reports whether the expression evaluates to true.
+	// It calls ok(tag) as needed to find out whether a given build tag
+	// is satisfied by the current build configuration.
+	Eval(ok func(tag string) bool) bool
+	// Has unexported methods.
+}
+func Parse(line string) (Expr, error)
+type NotExpr struct {
+	X Expr
+}
+func (x *NotExpr) Eval(ok func(tag string) bool) bool
+func (x *NotExpr) String() string
+type OrExpr struct {
+	X, Y Expr
+}
+func (x *OrExpr) Eval(ok func(tag string) bool) bool
+func (x *OrExpr) String() string
+type SyntaxError struct {
+	Offset int    // byte offset in input where error was detected
+	Err    string // description of error
+}
+func (e *SyntaxError) Error() string
+type TagExpr struct {
+	Tag string // for example, “linux” or “cgo”
+}
+func (x *TagExpr) Eval(ok func(tag string) bool) bool

@@ -1,0 +1,5 @@
+func Decode(dst, src []byte, flush bool) (ndst, nsrc int, err error)
+func Encode(dst, src []byte) int
+func MaxEncodedLen(n int) int
+func NewDecoder(r io.Reader) io.Reader
+func NewEncoder(w io.Writer) io.WriteCloser

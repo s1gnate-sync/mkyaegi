@@ -1,0 +1,57 @@
+type Error struct {
+	Op  string
+	URL string
+	Err error
+}
+func (e *Error) Error() string
+func (e *Error) Temporary() bool
+func (e *Error) Timeout() bool
+func (e *Error) Unwrap() error
+type EscapeError string
+func (e EscapeError) Error() string
+type InvalidHostError string
+func (e InvalidHostError) Error() string
+type URL struct {
+	Scheme      string
+	Opaque      string    // encoded opaque data
+	User        *Userinfo // username and password information
+	Host        string    // host or host:port (see Hostname and Port methods)
+	Path        string    // path (relative paths may omit leading slash)
+	RawPath     string    // encoded path hint (see EscapedPath method)
+	OmitHost    bool      // do not emit empty host (authority)
+	ForceQuery  bool      // append a query ('?') even if RawQuery is empty
+	RawQuery    string    // encoded query values, without '?'
+	Fragment    string    // fragment for references, without '#'
+	RawFragment string    // encoded fragment hint (see EscapedFragment method)
+}
+func Parse(rawURL string) (*URL, error)
+func ParseRequestURI(rawURL string) (*URL, error)
+func (u *URL) EscapedFragment() string
+func (u *URL) EscapedPath() string
+func (u *URL) Hostname() string
+func (u *URL) IsAbs() bool
+func (u *URL) JoinPath(elem ...string) *URL
+func (u *URL) MarshalBinary() (text []byte, err error)
+func (u *URL) Parse(ref string) (*URL, error)
+func (u *URL) Port() string
+func (u *URL) Query() Values
+func (u *URL) Redacted() string
+func (u *URL) RequestURI() string
+func (u *URL) ResolveReference(ref *URL) *URL
+func (u *URL) String() string
+func (u *URL) UnmarshalBinary(text []byte) error
+type Userinfo struct {
+	// Has unexported fields.
+}
+func User(username string) *Userinfo
+func UserPassword(username, password string) *Userinfo
+func (u *Userinfo) Password() (string, bool)
+func (u *Userinfo) String() string
+func (u *Userinfo) Username() string
+type Values map[string][]string
+func ParseQuery(query string) (Values, error)
+func (v Values) Add(key, value string)
+func (v Values) Del(key string)
+func (v Values) Encode() string
+func (v Values) Get(key string) string
+func (v Values) Has(key string) bool

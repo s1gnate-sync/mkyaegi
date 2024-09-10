@@ -1,0 +1,65 @@
+type DecodingError struct {
+	// Has unexported fields.
+}
+func (e *DecodingError) Error() string
+type Func struct {
+	Entry uint64
+	*Sym
+	End       uint64
+	Params    []*Sym // nil for Go 1.3 and later binaries
+	Locals    []*Sym // nil for Go 1.3 and later binaries
+	FrameSize int
+	LineTable *LineTable
+	Obj       *Obj
+}
+type LineTable struct {
+	Data []byte
+	PC   uint64
+	Line int
+	// Has unexported fields.
+}
+func NewLineTable(data []byte, text uint64) *LineTable
+func (t *LineTable) LineToPC(line int, maxpc uint64) uint64
+func (t *LineTable) PCToLine(pc uint64) int
+type Obj struct {
+	// Funcs is a list of functions in the Obj.
+	Funcs []Func
+	// In Go 1.1 and earlier, Paths is a list of symbols corresponding
+	// to the source file names that produced the Obj.
+	// In Go 1.2, Paths is nil.
+	// Use the keys of Table.Files to obtain a list of source files.
+	Paths []Sym // meta
+}
+type Sym struct {
+	Value  uint64
+	Type   byte
+	Name   string
+	GoType uint64
+	// If this symbol is a function symbol, the corresponding Func
+	Func *Func
+	// Has unexported fields.
+}
+func (s *Sym) BaseName() string
+func (s *Sym) PackageName() string
+func (s *Sym) ReceiverName() string
+func (s *Sym) Static() bool
+type Table struct {
+	Syms  []Sym // nil for Go 1.3 and later binaries
+	Funcs []Func
+	Files map[string]*Obj // for Go 1.2 and later all files map to one Obj
+	Objs  []Obj           // for Go 1.2 and later only one Obj in slice
+	// Has unexported fields.
+}
+func NewTable(symtab []byte, pcln *LineTable) (*Table, error)
+func (t *Table) LineToPC(file string, line int) (pc uint64, fn *Func, err error)
+func (t *Table) LookupFunc(name string) *Func
+func (t *Table) LookupSym(name string) *Sym
+func (t *Table) PCToFunc(pc uint64) *Func
+func (t *Table) PCToLine(pc uint64) (file string, line int, fn *Func)
+func (t *Table) SymByAddr(addr uint64) *Sym
+type UnknownFileError string
+func (e UnknownFileError) Error() string
+type UnknownLineError struct {
+	File string
+	Line int
+}

@@ -1,0 +1,3 @@
+func Check(f any, config *Config) error
+func CheckEqual(f, g any, config *Config) error
+func Value(t reflect.Type, rand *rand.Rand) (value reflect.Value, ok bool)

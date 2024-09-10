@@ -1,0 +1,3 @@
+func Expand(s string, env func(string) string) (string, error)
+func Fields(s string, env func(string) string) ([]string, error)
+func SourceFile(ctx context.Context, path string) (map[string]expand.Variable, error)

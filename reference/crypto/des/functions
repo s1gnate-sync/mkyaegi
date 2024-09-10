@@ -1,0 +1,2 @@
+func NewCipher(key []byte) (cipher.Block, error)
+func NewTripleDESCipher(key []byte) (cipher.Block, error)

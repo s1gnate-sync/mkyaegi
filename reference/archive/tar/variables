@@ -1,0 +1,7 @@
+var (
+	ErrHeader          = errors.New("archive/tar: invalid tar header")
+	ErrWriteTooLong    = errors.New("archive/tar: write too long")
+	ErrFieldTooLong    = errors.New("archive/tar: header field too long")
+	ErrWriteAfterClose = errors.New("archive/tar: write after close")
+	ErrInsecurePath    = errors.New("archive/tar: insecure file path")
+)

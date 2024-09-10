@@ -1,0 +1,2 @@
+func Compare(x, y string) int
+func IsValid(x string) bool

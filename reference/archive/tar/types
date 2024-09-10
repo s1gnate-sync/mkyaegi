@@ -1,0 +1,124 @@
+type FileInfoNames interface {
+	fs.FileInfo
+	// Uname should give a user name.
+	Uname() (string, error)
+	// Gname should give a group name.
+	Gname() (string, error)
+}
+type Format int
+const (
+	// FormatUnknown indicates that the format is unknown.
+	FormatUnknown Format
+	// FormatUSTAR represents the USTAR header format defined in POSIX.1-1988.
+	//
+	// While this format is compatible with most tar readers,
+	// the format has several limitations making it unsuitable for some usages.
+	// Most notably, it cannot support sparse files, files larger than 8GiB,
+	// filenames larger than 256 characters, and non-ASCII filenames.
+	//
+	// Reference:
+	//	http://pubs.opengroup.org/onlinepubs/9699919799/utilities/pax.html#tag_20_92_13_06
+	FormatUSTAR
+	// FormatPAX represents the PAX header format defined in POSIX.1-2001.
+	//
+	// PAX extends USTAR by writing a special file with Typeflag TypeXHeader
+	// preceding the original header. This file contains a set of key-value
+	// records, which are used to overcome USTAR's shortcomings, in addition to
+	// providing the ability to have sub-second resolution for timestamps.
+	//
+	// Some newer formats add their own extensions to PAX by defining their
+	// own keys and assigning certain semantic meaning to the associated values.
+	// For example, sparse file support in PAX is implemented using keys
+	// defined by the GNU manual (e.g., "GNU.sparse.map").
+	//
+	// Reference:
+	//	http://pubs.opengroup.org/onlinepubs/009695399/utilities/pax.html
+	FormatPAX
+	// FormatGNU represents the GNU header format.
+	//
+	// The GNU header format is older than the USTAR and PAX standards and
+	// is not compatible with them. The GNU format supports
+	// arbitrary file sizes, filenames of arbitrary encoding and length,
+	// sparse files, and other features.
+	//
+	// It is recommended that PAX be chosen over GNU unless the target
+	// application can only parse GNU formatted archives.
+	//
+	// Reference:
+	//	https://www.gnu.org/software/tar/manual/html_node/Standard.html
+	FormatGNU
+)
+func (f Format) String() string
+type Header struct {
+	// Typeflag is the type of header entry.
+	// The zero value is automatically promoted to either TypeReg or TypeDir
+	// depending on the presence of a trailing slash in Name.
+	Typeflag byte
+	Name     string // Name of file entry
+	Linkname string // Target name of link (valid for TypeLink or TypeSymlink)
+	Size  int64  // Logical file size in bytes
+	Mode  int64  // Permission and mode bits
+	Uid   int    // User ID of owner
+	Gid   int    // Group ID of owner
+	Uname string // User name of owner
+	Gname string // Group name of owner
+	// If the Format is unspecified, then Writer.WriteHeader rounds ModTime
+	// to the nearest second and ignores the AccessTime and ChangeTime fields.
+	//
+	// To use AccessTime or ChangeTime, specify the Format as PAX or GNU.
+	// To use sub-second resolution, specify the Format as PAX.
+	ModTime    time.Time // Modification time
+	AccessTime time.Time // Access time (requires either PAX or GNU support)
+	ChangeTime time.Time // Change time (requires either PAX or GNU support)
+	Devmajor int64 // Major device number (valid for TypeChar or TypeBlock)
+	Devminor int64 // Minor device number (valid for TypeChar or TypeBlock)
+	// Xattrs stores extended attributes as PAX records under the
+	// "SCHILY.xattr." namespace.
+	//
+	// The following are semantically equivalent:
+	//  h.Xattrs[key] = value
+	//  h.PAXRecords["SCHILY.xattr."+key] = value
+	//
+	// When Writer.WriteHeader is called, the contents of Xattrs will take
+	// precedence over those in PAXRecords.
+	//
+	// Deprecated: Use PAXRecords instead.
+	Xattrs map[string]string
+	// PAXRecords is a map of PAX extended header records.
+	//
+	// User-defined records should have keys of the following form:
+	//	VENDOR.keyword
+	// Where VENDOR is some namespace in all uppercase, and keyword may
+	// not contain the '=' character (e.g., "GOLANG.pkg.version").
+	// The key and value should be non-empty UTF-8 strings.
+	//
+	// When Writer.WriteHeader is called, PAX records derived from the
+	// other fields in Header take precedence over PAXRecords.
+	PAXRecords map[string]string
+	// Format specifies the format of the tar header.
+	//
+	// This is set by Reader.Next as a best-effort guess at the format.
+	// Since the Reader liberally reads some non-compliant files,
+	// it is possible for this to be FormatUnknown.
+	//
+	// If the format is unspecified when Writer.WriteHeader is called,
+	// then it uses the first format (in the order of USTAR, PAX, GNU)
+	// capable of encoding this Header (see Format).
+	Format Format
+}
+func FileInfoHeader(fi fs.FileInfo, link string) (*Header, error)
+func (h *Header) FileInfo() fs.FileInfo
+type Reader struct {
+	// Has unexported fields.
+}
+func NewReader(r io.Reader) *Reader
+func (tr *Reader) Next() (*Header, error)
+func (tr *Reader) Read(b []byte) (int, error)
+type Writer struct {
+	// Has unexported fields.
+}
+func NewWriter(w io.Writer) *Writer
+func (tw *Writer) AddFS(fsys fs.FS) error
+func (tw *Writer) Close() error
+func (tw *Writer) Flush() error
+func (tw *Writer) Write(b []byte) (int, error)

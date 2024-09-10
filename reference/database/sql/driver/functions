@@ -1,0 +1,2 @@
+func IsScanValue(v any) bool
+func IsValue(v any) bool

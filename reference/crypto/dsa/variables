@@ -1,0 +1,1 @@
+var ErrInvalidPublicKey = errors.New("crypto/dsa: invalid public key")

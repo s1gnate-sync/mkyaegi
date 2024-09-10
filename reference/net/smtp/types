@@ -1,0 +1,43 @@
+type Auth interface {
+	// Start begins an authentication with a server.
+	// It returns the name of the authentication protocol
+	// and optionally data to include in the initial AUTH message
+	// sent to the server.
+	// If it returns a non-nil error, the SMTP client aborts
+	// the authentication attempt and closes the connection.
+	Start(server *ServerInfo) (proto string, toServer []byte, err error)
+	// Next continues the authentication. The server has just sent
+	// the fromServer data. If more is true, the server expects a
+	// response, which Next should return as toServer; otherwise
+	// Next should return toServer == nil.
+	// If Next returns a non-nil error, the SMTP client aborts
+	// the authentication attempt and closes the connection.
+	Next(fromServer []byte, more bool) (toServer []byte, err error)
+}
+func CRAMMD5Auth(username, secret string) Auth
+func PlainAuth(identity, username, password, host string) Auth
+type Client struct {
+	// Text is the textproto.Conn used by the Client. It is exported to allow for
+	// clients to add extensions.
+	Text *textproto.Conn
+	// Has unexported fields.
+}
+func Dial(addr string) (*Client, error)
+func NewClient(conn net.Conn, host string) (*Client, error)
+func (c *Client) Auth(a Auth) error
+func (c *Client) Close() error
+func (c *Client) Data() (io.WriteCloser, error)
+func (c *Client) Extension(ext string) (bool, string)
+func (c *Client) Hello(localName string) error
+func (c *Client) Mail(from string) error
+func (c *Client) Noop() error
+func (c *Client) Quit() error
+func (c *Client) Rcpt(to string) error
+func (c *Client) Reset() error
+func (c *Client) StartTLS(config *tls.Config) error
+func (c *Client) TLSConnectionState() (state tls.ConnectionState, ok bool)
+func (c *Client) Verify(addr string) error
+type ServerInfo struct {
+	Name string   // SMTP server name
+	TLS  bool     // using TLS, with valid certificate for Name
+	Auth []string // advertised authentication mechanisms

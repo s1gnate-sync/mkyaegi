@@ -1,0 +1,1 @@
+func LookPath(file string) (string, error)

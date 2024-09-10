@@ -1,0 +1,8 @@
+func HTMLEscape(w io.Writer, b []byte)
+func HTMLEscapeString(s string) string
+func HTMLEscaper(args ...any) string
+func IsTrue(val any) (truth, ok bool)
+func JSEscape(w io.Writer, b []byte)
+func JSEscapeString(s string) string
+func JSEscaper(args ...any) string
+func URLQueryEscaper(args ...any) string

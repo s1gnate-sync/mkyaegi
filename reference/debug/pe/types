@@ -1,0 +1,175 @@
+type COFFSymbol struct {
+	Name               [8]uint8
+	Value              uint32
+	SectionNumber      int16
+	Type               uint16
+	StorageClass       uint8
+	NumberOfAuxSymbols uint8
+}
+func (sym *COFFSymbol) FullName(st StringTable) (string, error)
+type COFFSymbolAuxFormat5 struct {
+	Size           uint32
+	NumRelocs      uint16
+	NumLineNumbers uint16
+	Checksum       uint32
+	SecNum         uint16
+	Selection      uint8
+	// Has unexported fields.
+}
+type DataDirectory struct {
+	VirtualAddress uint32
+	Size           uint32
+}
+type File struct {
+	FileHeader
+	OptionalHeader any // of type *OptionalHeader32 or *OptionalHeader64
+	Sections       []*Section
+	Symbols        []*Symbol    // COFF symbols with auxiliary symbol records removed
+	COFFSymbols    []COFFSymbol // all COFF symbols (including auxiliary symbol records)
+	StringTable    StringTable
+	// Has unexported fields.
+}
+func NewFile(r io.ReaderAt) (*File, error)
+func Open(name string) (*File, error)
+func (f *File) COFFSymbolReadSectionDefAux(idx int) (*COFFSymbolAuxFormat5, error)
+func (f *File) Close() error
+func (f *File) DWARF() (*dwarf.Data, error)
+func (f *File) ImportedLibraries() ([]string, error)
+func (f *File) ImportedSymbols() ([]string, error)
+func (f *File) Section(name string) *Section
+type FileHeader struct {
+	Machine              uint16
+	NumberOfSections     uint16
+	TimeDateStamp        uint32
+	PointerToSymbolTable uint32
+	NumberOfSymbols      uint32
+	SizeOfOptionalHeader uint16
+	Characteristics      uint16
+}
+type FormatError struct {
+}
+func (e *FormatError) Error() string
+type ImportDirectory struct {
+	OriginalFirstThunk uint32
+	TimeDateStamp      uint32
+	ForwarderChain     uint32
+	Name               uint32
+	FirstThunk         uint32
+	// Has unexported fields.
+}
+type OptionalHeader32 struct {
+	Magic                       uint16
+	MajorLinkerVersion          uint8
+	MinorLinkerVersion          uint8
+	SizeOfCode                  uint32
+	SizeOfInitializedData       uint32
+	SizeOfUninitializedData     uint32
+	AddressOfEntryPoint         uint32
+	BaseOfCode                  uint32
+	BaseOfData                  uint32
+	ImageBase                   uint32
+	SectionAlignment            uint32
+	FileAlignment               uint32
+	MajorOperatingSystemVersion uint16
+	MinorOperatingSystemVersion uint16
+	MajorImageVersion           uint16
+	MinorImageVersion           uint16
+	MajorSubsystemVersion       uint16
+	MinorSubsystemVersion       uint16
+	Win32VersionValue           uint32
+	SizeOfImage                 uint32
+	SizeOfHeaders               uint32
+	CheckSum                    uint32
+	Subsystem                   uint16
+	DllCharacteristics          uint16
+	SizeOfStackReserve          uint32
+	SizeOfStackCommit           uint32
+	SizeOfHeapReserve           uint32
+	SizeOfHeapCommit            uint32
+	LoaderFlags                 uint32
+	NumberOfRvaAndSizes         uint32
+	DataDirectory               [16]DataDirectory
+}
+type OptionalHeader64 struct {
+	Magic                       uint16
+	MajorLinkerVersion          uint8
+	MinorLinkerVersion          uint8
+	SizeOfCode                  uint32
+	SizeOfInitializedData       uint32
+	SizeOfUninitializedData     uint32
+	AddressOfEntryPoint         uint32
+	BaseOfCode                  uint32
+	ImageBase                   uint64
+	SectionAlignment            uint32
+	FileAlignment               uint32
+	MajorOperatingSystemVersion uint16
+	MinorOperatingSystemVersion uint16
+	MajorImageVersion           uint16
+	MinorImageVersion           uint16
+	MajorSubsystemVersion       uint16
+	MinorSubsystemVersion       uint16
+	Win32VersionValue           uint32
+	SizeOfImage                 uint32
+	SizeOfHeaders               uint32
+	CheckSum                    uint32
+	Subsystem                   uint16
+	DllCharacteristics          uint16
+	SizeOfStackReserve          uint64
+	SizeOfStackCommit           uint64
+	SizeOfHeapReserve           uint64
+	SizeOfHeapCommit            uint64
+	LoaderFlags                 uint32
+	NumberOfRvaAndSizes         uint32
+	DataDirectory               [16]DataDirectory
+}
+type Reloc struct {
+	VirtualAddress   uint32
+	SymbolTableIndex uint32
+	Type             uint16
+}
+type Section struct {
+	SectionHeader
+	Relocs []Reloc
+	// Embed ReaderAt for ReadAt method.
+	// Do not embed SectionReader directly
+	// to avoid having Read and Seek.
+	// If a client wants Read and Seek it must use
+	// Open() to avoid fighting over the seek offset
+	// with other clients.
+	io.ReaderAt
+	// Has unexported fields.
+}
+func (s *Section) Data() ([]byte, error)
+func (s *Section) Open() io.ReadSeeker
+type SectionHeader struct {
+	Name                 string
+	VirtualSize          uint32
+	VirtualAddress       uint32
+	Size                 uint32
+	Offset               uint32
+	PointerToRelocations uint32
+	PointerToLineNumbers uint32
+	NumberOfRelocations  uint16
+	NumberOfLineNumbers  uint16
+	Characteristics      uint32
+}
+type SectionHeader32 struct {
+	Name                 [8]uint8
+	VirtualSize          uint32
+	VirtualAddress       uint32
+	SizeOfRawData        uint32
+	PointerToRawData     uint32
+	PointerToRelocations uint32
+	PointerToLineNumbers uint32
+	NumberOfRelocations  uint16
+	NumberOfLineNumbers  uint16
+	Characteristics      uint32
+}
+type StringTable []byte
+func (st StringTable) String(start uint32) (string, error)
+type Symbol struct {
+	Name          string
+	Value         uint32
+	SectionNumber int16
+	Type          uint16
+	StorageClass  uint8

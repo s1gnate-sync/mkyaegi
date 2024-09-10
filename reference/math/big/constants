@@ -1,0 +1,6 @@
+const (
+	MaxExp  = math.MaxInt32  // largest supported exponent
+	MinExp  = math.MinInt32  // smallest supported exponent
+	MaxPrec = math.MaxUint32 // largest (theoretically) supported precision; likely memory-limited
+)
+const MaxBase = 10 + ('z' - 'a' + 1) + ('Z' - 'A' + 1)

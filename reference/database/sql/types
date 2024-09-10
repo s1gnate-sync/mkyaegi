@@ -1,0 +1,228 @@
+type ColumnType struct {
+	// Has unexported fields.
+}
+func (ci *ColumnType) DatabaseTypeName() string
+func (ci *ColumnType) DecimalSize() (precision, scale int64, ok bool)
+func (ci *ColumnType) Length() (length int64, ok bool)
+func (ci *ColumnType) Name() string
+func (ci *ColumnType) Nullable() (nullable, ok bool)
+func (ci *ColumnType) ScanType() reflect.Type
+type Conn struct {
+	// Has unexported fields.
+}
+func (c *Conn) BeginTx(ctx context.Context, opts *TxOptions) (*Tx, error)
+func (c *Conn) Close() error
+func (c *Conn) ExecContext(ctx context.Context, query string, args ...any) (Result, error)
+func (c *Conn) PingContext(ctx context.Context) error
+func (c *Conn) PrepareContext(ctx context.Context, query string) (*Stmt, error)
+func (c *Conn) QueryContext(ctx context.Context, query string, args ...any) (*Rows, error)
+func (c *Conn) QueryRowContext(ctx context.Context, query string, args ...any) *Row
+func (c *Conn) Raw(f func(driverConn any) error) (err error)
+type DB struct {
+	// Has unexported fields.
+}
+func Open(driverName, dataSourceName string) (*DB, error)
+func OpenDB(c driver.Connector) *DB
+func (db *DB) Begin() (*Tx, error)
+func (db *DB) BeginTx(ctx context.Context, opts *TxOptions) (*Tx, error)
+func (db *DB) Close() error
+func (db *DB) Conn(ctx context.Context) (*Conn, error)
+func (db *DB) Driver() driver.Driver
+func (db *DB) Exec(query string, args ...any) (Result, error)
+func (db *DB) ExecContext(ctx context.Context, query string, args ...any) (Result, error)
+func (db *DB) Ping() error
+func (db *DB) PingContext(ctx context.Context) error
+func (db *DB) Prepare(query string) (*Stmt, error)
+func (db *DB) PrepareContext(ctx context.Context, query string) (*Stmt, error)
+func (db *DB) Query(query string, args ...any) (*Rows, error)
+func (db *DB) QueryContext(ctx context.Context, query string, args ...any) (*Rows, error)
+func (db *DB) QueryRow(query string, args ...any) *Row
+func (db *DB) QueryRowContext(ctx context.Context, query string, args ...any) *Row
+func (db *DB) SetConnMaxIdleTime(d time.Duration)
+func (db *DB) SetConnMaxLifetime(d time.Duration)
+func (db *DB) SetMaxIdleConns(n int)
+func (db *DB) SetMaxOpenConns(n int)
+func (db *DB) Stats() DBStats
+type DBStats struct {
+	MaxOpenConnections int // Maximum number of open connections to the database.
+	// Pool Status
+	OpenConnections int // The number of established connections both in use and idle.
+	InUse           int // The number of connections currently in use.
+	Idle            int // The number of idle connections.
+	// Counters
+	WaitCount         int64         // The total number of connections waited for.
+	WaitDuration      time.Duration // The total time blocked waiting for a new connection.
+	MaxIdleClosed     int64         // The total number of connections closed due to SetMaxIdleConns.
+	MaxIdleTimeClosed int64         // The total number of connections closed due to SetConnMaxIdleTime.
+	MaxLifetimeClosed int64         // The total number of connections closed due to SetConnMaxLifetime.
+}
+type IsolationLevel int
+const (
+	LevelDefault IsolationLevel = iota
+	LevelReadUncommitted
+	LevelReadCommitted
+	LevelWriteCommitted
+	LevelRepeatableRead
+	LevelSnapshot
+	LevelSerializable
+	LevelLinearizable
+)
+func (i IsolationLevel) String() string
+type NamedArg struct {
+	// Name is the name of the parameter placeholder.
+	//
+	// If empty, the ordinal position in the argument list will be
+	// used.
+	//
+	// Name must omit any symbol prefix.
+	Name string
+	// Value is the value of the parameter.
+	// It may be assigned the same value types as the query
+	// arguments.
+	Value any
+	// Has unexported fields.
+}
+func Named(name string, value any) NamedArg
+type Null[T any] struct {
+	V     T
+	Valid bool
+}
+func (n *Null[T]) Scan(value any) error
+func (n Null[T]) Value() (driver.Value, error)
+type NullBool struct {
+	Bool  bool
+	Valid bool // Valid is true if Bool is not NULL
+}
+func (n *NullBool) Scan(value any) error
+func (n NullBool) Value() (driver.Value, error)
+type NullByte struct {
+	Byte  byte
+	Valid bool // Valid is true if Byte is not NULL
+}
+func (n *NullByte) Scan(value any) error
+func (n NullByte) Value() (driver.Value, error)
+type NullFloat64 struct {
+	Float64 float64
+	Valid   bool // Valid is true if Float64 is not NULL
+}
+func (n *NullFloat64) Scan(value any) error
+func (n NullFloat64) Value() (driver.Value, error)
+type NullInt16 struct {
+	Int16 int16
+	Valid bool // Valid is true if Int16 is not NULL
+}
+func (n *NullInt16) Scan(value any) error
+func (n NullInt16) Value() (driver.Value, error)
+type NullInt32 struct {
+	Int32 int32
+	Valid bool // Valid is true if Int32 is not NULL
+}
+func (n *NullInt32) Scan(value any) error
+func (n NullInt32) Value() (driver.Value, error)
+type NullInt64 struct {
+	Int64 int64
+	Valid bool // Valid is true if Int64 is not NULL
+}
+func (n *NullInt64) Scan(value any) error
+func (n NullInt64) Value() (driver.Value, error)
+type NullString struct {
+	String string
+	Valid  bool // Valid is true if String is not NULL
+}
+func (ns *NullString) Scan(value any) error
+func (ns NullString) Value() (driver.Value, error)
+type NullTime struct {
+	Time  time.Time
+	Valid bool // Valid is true if Time is not NULL
+}
+func (n *NullTime) Scan(value any) error
+func (n NullTime) Value() (driver.Value, error)
+type Out struct {
+	// Dest is a pointer to the value that will be set to the result of the
+	// stored procedure's OUTPUT parameter.
+	Dest any
+	// In is whether the parameter is an INOUT parameter. If so, the input value to the stored
+	// procedure is the dereferenced value of Dest's pointer, which is then replaced with
+	// the output value.
+	In bool
+	// Has unexported fields.
+}
+type RawBytes []byte
+type Result interface {
+	// LastInsertId returns the integer generated by the database
+	// in response to a command. Typically this will be from an
+	// "auto increment" column when inserting a new row. Not all
+	// databases support this feature, and the syntax of such
+	// statements varies.
+	LastInsertId() (int64, error)
+	// RowsAffected returns the number of rows affected by an
+	// update, insert, or delete. Not every database or database
+	// driver may support this.
+	RowsAffected() (int64, error)
+}
+type Row struct {
+	// Has unexported fields.
+}
+func (r *Row) Err() error
+func (r *Row) Scan(dest ...any) error
+type Rows struct {
+	// Has unexported fields.
+}
+func (rs *Rows) Close() error
+func (rs *Rows) ColumnTypes() ([]*ColumnType, error)
+func (rs *Rows) Columns() ([]string, error)
+func (rs *Rows) Err() error
+func (rs *Rows) Next() bool
+func (rs *Rows) NextResultSet() bool
+func (rs *Rows) Scan(dest ...any) error
+type Scanner interface {
+	// Scan assigns a value from a database driver.
+	//
+	// The src value will be of one of the following types:
+	//
+	//    int64
+	//    float64
+	//    bool
+	//    []byte
+	//    string
+	//    time.Time
+	//    nil - for NULL values
+	//
+	// An error should be returned if the value cannot be stored
+	// without loss of information.
+	//
+	// Reference types such as []byte are only valid until the next call to Scan
+	// and should not be retained. Their underlying memory is owned by the driver.
+	// If retention is necessary, copy their values before the next call to Scan.
+	Scan(src any) error
+}
+type Stmt struct {
+	// Has unexported fields.
+}
+func (s *Stmt) Close() error
+func (s *Stmt) Exec(args ...any) (Result, error)
+func (s *Stmt) ExecContext(ctx context.Context, args ...any) (Result, error)
+func (s *Stmt) Query(args ...any) (*Rows, error)
+func (s *Stmt) QueryContext(ctx context.Context, args ...any) (*Rows, error)
+func (s *Stmt) QueryRow(args ...any) *Row
+func (s *Stmt) QueryRowContext(ctx context.Context, args ...any) *Row
+type Tx struct {
+	// Has unexported fields.
+}
+func (tx *Tx) Commit() error
+func (tx *Tx) Exec(query string, args ...any) (Result, error)
+func (tx *Tx) ExecContext(ctx context.Context, query string, args ...any) (Result, error)
+func (tx *Tx) Prepare(query string) (*Stmt, error)
+func (tx *Tx) PrepareContext(ctx context.Context, query string) (*Stmt, error)
+func (tx *Tx) Query(query string, args ...any) (*Rows, error)
+func (tx *Tx) QueryContext(ctx context.Context, query string, args ...any) (*Rows, error)
+func (tx *Tx) QueryRow(query string, args ...any) *Row
+func (tx *Tx) QueryRowContext(ctx context.Context, query string, args ...any) *Row
+func (tx *Tx) Rollback() error
+func (tx *Tx) Stmt(stmt *Stmt) *Stmt
+func (tx *Tx) StmtContext(ctx context.Context, stmt *Stmt) *Stmt
+type TxOptions struct {
+	// Isolation is the transaction isolation level.
+	// If zero, the driver or database's default level is used.
+	Isolation IsolationLevel
+	ReadOnly  bool

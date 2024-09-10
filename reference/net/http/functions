@@ -1,0 +1,31 @@
+func CanonicalHeaderKey(s string) string
+func DetectContentType(data []byte) string
+func Error(w ResponseWriter, error string, code int)
+func Get(url string) (resp *Response, err error)
+func Handle(pattern string, handler Handler)
+func HandleFunc(pattern string, handler func(ResponseWriter, *Request))
+func Head(url string) (resp *Response, err error)
+func ListenAndServe(addr string, handler Handler) error
+func ListenAndServeTLS(addr, certFile, keyFile string, handler Handler) error
+func MaxBytesReader(w ResponseWriter, r io.ReadCloser, n int64) io.ReadCloser
+func NewRequest(method, url string, body io.Reader) (*Request, error)
+func NewRequestWithContext(ctx context.Context, method, url string, body io.Reader) (*Request, error)
+func NotFound(w ResponseWriter, r *Request)
+func ParseCookie(line string) ([]*Cookie, error)
+func ParseHTTPVersion(vers string) (major, minor int, ok bool)
+func ParseSetCookie(line string) (*Cookie, error)
+func ParseTime(text string) (t time.Time, err error)
+func Post(url, contentType string, body io.Reader) (resp *Response, err error)
+func PostForm(url string, data url.Values) (resp *Response, err error)
+func ProxyFromEnvironment(req *Request) (*url.URL, error)
+func ProxyURL(fixedURL *url.URL) func(*Request) (*url.URL, error)
+func ReadRequest(b *bufio.Reader) (*Request, error)
+func ReadResponse(r *bufio.Reader, req *Request) (*Response, error)
+func Redirect(w ResponseWriter, r *Request, url string, code int)
+func Serve(l net.Listener, handler Handler) error
+func ServeContent(w ResponseWriter, req *Request, name string, modtime time.Time, content io.ReadSeeker)
+func ServeFile(w ResponseWriter, r *Request, name string)
+func ServeFileFS(w ResponseWriter, r *Request, fsys fs.FS, name string)
+func ServeTLS(l net.Listener, handler Handler, certFile, keyFile string) error
+func SetCookie(w ResponseWriter, cookie *Cookie)
+func StatusText(code int) string

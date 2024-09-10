@@ -1,0 +1,10 @@
+type FormatError string
+func (e FormatError) Error() string
+type Options struct {
+	Quality int
+}
+type Reader interface {
+	io.ByteReader
+	io.Reader
+}
+type UnsupportedError string

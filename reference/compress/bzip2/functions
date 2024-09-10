@@ -1,0 +1,1 @@
+func NewReader(r io.Reader) io.Reader

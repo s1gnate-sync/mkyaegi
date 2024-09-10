@@ -1,0 +1,6 @@
+var CommandLine = NewFlagSet(os.Args[0], ExitOnError)
+var ErrHelp = errors.New("flag: help requested")
+var Usage = func() {
+	fmt.Fprintf(CommandLine.Output(), "Usage of %s:\n", os.Args[0])
+	PrintDefaults()
+}

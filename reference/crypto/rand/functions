@@ -1,0 +1,2 @@
+func Int(rand io.Reader, max *big.Int) (n *big.Int, err error)
+func Prime(rand io.Reader, bits int) (*big.Int, error)

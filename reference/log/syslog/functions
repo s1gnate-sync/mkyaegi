@@ -1,0 +1,1 @@
+func NewLogger(p Priority, logFlag int) (*log.Logger, error)

@@ -1,0 +1,2 @@
+var HTMLAutoClose []string = htmlAutoClose
+var HTMLEntity map[string]string = htmlEntity

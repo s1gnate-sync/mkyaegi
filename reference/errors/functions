@@ -1,0 +1,4 @@
+func As(err error, target any) bool
+func Is(err, target error) bool
+func Join(errs ...error) error
+func New(text string) error

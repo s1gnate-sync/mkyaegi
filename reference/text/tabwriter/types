@@ -1,0 +1,6 @@
+type Writer struct {
+	// Has unexported fields.
+}
+func NewWriter(output io.Writer, minwidth, tabwidth, padding int, padchar byte, flags uint) *Writer
+func (b *Writer) Flush() error
+func (b *Writer) Init(output io.Writer, minwidth, tabwidth, padding int, padchar byte, flags uint) *Writer

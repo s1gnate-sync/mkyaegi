@@ -1,0 +1,2 @@
+var NullBytes = []byte{TagNull, 0}
+var NullRawValue = RawValue{Tag: TagNull}

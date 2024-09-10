@@ -1,0 +1,3 @@
+func Compare[T Ordered](x, y T) int
+func Less[T Ordered](x, y T) bool
+func Or[T comparable](vals ...T) T

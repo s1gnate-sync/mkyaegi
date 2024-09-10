@@ -1,0 +1,15 @@
+type CorruptInputError int64
+func (e CorruptInputError) Error() string
+type Encoding struct {
+	// Has unexported fields.
+}
+func NewEncoding(encoder string) *Encoding
+func (enc *Encoding) AppendDecode(dst, src []byte) ([]byte, error)
+func (enc *Encoding) AppendEncode(dst, src []byte) []byte
+func (enc *Encoding) Decode(dst, src []byte) (n int, err error)
+func (enc *Encoding) DecodeString(s string) ([]byte, error)
+func (enc *Encoding) DecodedLen(n int) int
+func (enc *Encoding) Encode(dst, src []byte)
+func (enc *Encoding) EncodeToString(src []byte) string
+func (enc *Encoding) EncodedLen(n int) int
+func (enc Encoding) Strict() *Encoding

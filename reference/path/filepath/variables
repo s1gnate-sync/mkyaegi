@@ -1,0 +1,3 @@
+var ErrBadPattern = errors.New("syntax error in pattern")
+var SkipAll error = fs.SkipAll
+var SkipDir error = fs.SkipDir

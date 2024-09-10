@@ -1,0 +1,139 @@
+type Breakpoint struct {
+	// Valid indicates whether the breakpoint was successfully set.
+	Valid bool
+	// Position indicates the source position of the breakpoint.
+	Position token.Position
+}
+type BreakpointRequest func(*breakpointSetup, int)
+func FunctionBreakpoint(name string) BreakpointRequest
+func LineBreakpoint(line int) BreakpointRequest
+type BreakpointTarget func(*Debugger, func(*node))
+func AllBreakpointTarget() BreakpointTarget
+func PathBreakpointTarget(path string) BreakpointTarget
+func ProgramBreakpointTarget(prog *Program) BreakpointTarget
+type DebugEvent struct {
+	// Has unexported fields.
+}
+func (evt *DebugEvent) FrameDepth() int
+func (evt *DebugEvent) Frames(start, end int) []*DebugFrame
+func (evt *DebugEvent) GoRoutine() int
+func (evt *DebugEvent) Reason() DebugEventReason
+type DebugEventReason int
+const (
+	// DebugPause is emitted when a pause request is completed. Can be used with
+	// Interrupt to request a pause.
+	DebugPause DebugEventReason
+	// DebugBreak is emitted when a debug target hits a breakpoint.
+	DebugBreak
+	// DebugEntry is emitted when a debug target starts executing. Can be used
+	// with Step to produce a corresponding event when execution starts.
+	DebugEntry
+	// DebugStepInto is emitted when a stepInto request is completed. Can be
+	// used with Step or Interrupt to request a stepInto.
+	DebugStepInto
+	// DebugStepOver is emitted when a stepOver request is completed. Can be
+	// used with Step or Interrupt to request a stepOver.
+	DebugStepOver
+	// DebugStepOut is emitted when a stepOut request is completed. Can be used
+	// with Step or Interrupt to request a stepOut.
+	DebugStepOut
+	// DebugTerminate is emitted when a debug target terminates. Can be used
+	// with Interrupt to attempt to terminate the program.
+	DebugTerminate
+	// DebugEnterGoRoutine is emitted when a Go routine is entered.
+	DebugEnterGoRoutine
+	// DebugExitGoRoutine is emitted when a Go routine is exited.
+	DebugExitGoRoutine
+)
+type DebugFrame struct {
+	// Has unexported fields.
+}
+func (f *DebugFrame) Name() string
+func (f *DebugFrame) Position() token.Position
+func (f *DebugFrame) Program() *Program
+func (f *DebugFrame) Scopes() []*DebugFrameScope
+type DebugFrameScope struct {
+	// Has unexported fields.
+}
+func (f *DebugFrameScope) IsClosure() bool
+func (f *DebugFrameScope) Variables() []*DebugVariable
+type DebugGoRoutine struct {
+	// Has unexported fields.
+}
+func (r *DebugGoRoutine) ID() int
+func (r *DebugGoRoutine) Name() string
+type DebugOptions struct {
+	// If true, Go routine IDs start at 1 instead of 0.
+	GoRoutineStartAt1 bool
+}
+type DebugVariable struct {
+	Name  string
+	Value reflect.Value
+}
+type Debugger struct {
+	// Has unexported fields.
+}
+func (dbg *Debugger) Continue(id int) error
+func (dbg *Debugger) GoRoutines() []*DebugGoRoutine
+func (dbg *Debugger) Interrupt(id int, reason DebugEventReason) bool
+func (dbg *Debugger) SetBreakpoints(target BreakpointTarget, requests ...BreakpointRequest) []Breakpoint
+func (dbg *Debugger) Step(id int, reason DebugEventReason) error
+func (dbg *Debugger) Terminate()
+func (dbg *Debugger) Wait() (reflect.Value, error)
+type Exports map[string]map[string]reflect.Value
+type Interpreter struct {
+	// Has unexported fields.
+}
+var Self *Interpreter
+func New(options Options) *Interpreter
+func (interp *Interpreter) Compile(src string) (*Program, error)
+func (interp *Interpreter) CompileAST(n ast.Node) (*Program, error)
+func (interp *Interpreter) CompilePath(path string) (*Program, error)
+func (interp *Interpreter) Debug(ctx context.Context, prog *Program, events func(*DebugEvent), opts *DebugOptions) *Debugger
+func (interp *Interpreter) Eval(src string) (res reflect.Value, err error)
+func (interp *Interpreter) EvalPath(path string) (res reflect.Value, err error)
+func (interp *Interpreter) EvalPathWithContext(ctx context.Context, path string) (res reflect.Value, err error)
+func (interp *Interpreter) EvalTest(path string) error
+func (interp *Interpreter) EvalWithContext(ctx context.Context, src string) (reflect.Value, error)
+func (interp *Interpreter) Execute(p *Program) (res reflect.Value, err error)
+func (interp *Interpreter) ExecuteWithContext(ctx context.Context, p *Program) (res reflect.Value, err error)
+func (interp *Interpreter) FileSet() *token.FileSet
+func (interp *Interpreter) Globals() map[string]reflect.Value
+func (interp *Interpreter) ImportUsed()
+func (interp *Interpreter) REPL() (reflect.Value, error)
+func (interp *Interpreter) Symbols(importPath string) Exports
+func (interp *Interpreter) Use(values Exports) error
+type Options struct {
+	// GoPath sets GOPATH for the interpreter.
+	GoPath string
+	// BuildTags sets build constraints for the interpreter.
+	BuildTags []string
+	// Standard input, output and error streams.
+	// They default to os.Stdin, os.Stdout and os.Stderr respectively.
+	Stdin          io.Reader
+	Stdout, Stderr io.Writer
+	// Cmdline args, defaults to os.Args.
+	Args []string
+	// Environment of interpreter. Entries are in the form "key=values".
+	Env []string
+	// SourcecodeFilesystem is where the _sourcecode_ is loaded from and does
+	// NOT affect the filesystem of scripts when they run.
+	// It can be any fs.FS compliant filesystem (e.g. embed.FS, or fstest.MapFS for testing)
+	// See example/fs/fs_test.go for an example.
+	SourcecodeFilesystem fs.FS
+	// Unrestricted allows to run non sandboxed stdlib symbols such as os/exec and environment
+	Unrestricted bool
+}
+type Panic struct {
+	// Value is the recovered value of a call to panic.
+	Value interface{}
+	// Callers is the call stack obtained from the recover call.
+	// It may be used as the parameter to runtime.CallersFrames.
+	Callers []uintptr
+	// Stack is the call stack buffer for debug.
+	Stack []byte
+}
+func (e Panic) Error() string
+type Program struct {
+	// Has unexported fields.
+}

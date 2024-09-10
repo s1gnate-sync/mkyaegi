@@ -1,0 +1,5 @@
+const (
+	// Defaults used by HandleHTTP
+	DefaultRPCPath   = "/_goRPC_"
+	DefaultDebugPath = "/debug/rpc"
+)

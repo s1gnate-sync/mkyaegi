@@ -1,0 +1,19 @@
+func ExpFloat64() float64
+func Float32() float32
+func Float64() float64
+func Int() int
+func Int32() int32
+func Int32N(n int32) int32
+func Int64() int64
+func Int64N(n int64) int64
+func IntN(n int) int
+func N[Int intType](n Int) Int
+func NormFloat64() float64
+func Perm(n int) []int
+func Shuffle(n int, swap func(i, j int))
+func Uint() uint
+func Uint32() uint32
+func Uint32N(n uint32) uint32
+func Uint64() uint64
+func Uint64N(n uint64) uint64
+func UintN(n uint) uint

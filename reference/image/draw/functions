@@ -1,0 +1,2 @@
+func Draw(dst Image, r image.Rectangle, src image.Image, sp image.Point, op Op)
+func DrawMask(dst Image, r image.Rectangle, src image.Image, sp image.Point, mask image.Image, mp image.Point, op Op)

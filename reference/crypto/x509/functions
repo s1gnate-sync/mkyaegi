@@ -1,0 +1,19 @@
+func CreateCertificate(rand io.Reader, template, parent *Certificate, pub, priv any) ([]byte, error)
+func CreateCertificateRequest(rand io.Reader, template *CertificateRequest, priv any) (csr []byte, err error)
+func CreateRevocationList(rand io.Reader, template *RevocationList, issuer *Certificate, priv crypto.Signer) ([]byte, error)
+func DecryptPEMBlock(b *pem.Block, password []byte) ([]byte, error)
+func EncryptPEMBlock(rand io.Reader, blockType string, data, password []byte, alg PEMCipher) (*pem.Block, error)
+func IsEncryptedPEMBlock(b *pem.Block) bool
+func MarshalECPrivateKey(key *ecdsa.PrivateKey) ([]byte, error)
+func MarshalPKCS1PrivateKey(key *rsa.PrivateKey) []byte
+func MarshalPKCS1PublicKey(key *rsa.PublicKey) []byte
+func MarshalPKCS8PrivateKey(key any) ([]byte, error)
+func MarshalPKIXPublicKey(pub any) ([]byte, error)
+func ParseCRL(crlBytes []byte) (*pkix.CertificateList, error)
+func ParseDERCRL(derBytes []byte) (*pkix.CertificateList, error)
+func ParseECPrivateKey(der []byte) (*ecdsa.PrivateKey, error)
+func ParsePKCS1PrivateKey(der []byte) (*rsa.PrivateKey, error)
+func ParsePKCS1PublicKey(der []byte) (*rsa.PublicKey, error)
+func ParsePKCS8PrivateKey(der []byte) (key any, err error)
+func ParsePKIXPublicKey(derBytes []byte) (pub any, err error)
+func SetFallbackRoots(roots *CertPool)

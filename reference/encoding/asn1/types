@@ -1,0 +1,25 @@
+type BitString struct {
+	Bytes     []byte // bits packed into bytes.
+	BitLength int    // length in bits.
+}
+func (b BitString) At(i int) int
+func (b BitString) RightAlign() []byte
+type Enumerated int
+type Flag bool
+type ObjectIdentifier []int
+func (oi ObjectIdentifier) Equal(other ObjectIdentifier) bool
+func (oi ObjectIdentifier) String() string
+type RawContent []byte
+type RawValue struct {
+	Class, Tag int
+	IsCompound bool
+	Bytes      []byte
+	FullBytes  []byte // includes the tag and length
+}
+type StructuralError struct {
+	Msg string
+}
+func (e StructuralError) Error() string
+type SyntaxError struct {
+	Msg string
+}

@@ -1,0 +1,2 @@
+var ErrUnsupportedAlgorithm = errors.New("x509: cannot verify signature: algorithm unimplemented")
+var IncorrectPasswordError = errors.New("x509: decryption password incorrect")
