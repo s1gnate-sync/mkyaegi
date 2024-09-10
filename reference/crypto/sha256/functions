@@ -1,3 +1,0 @@
-func New() hash.Hash
-func New224() hash.Hash
-func Sum224(data []byte) [Size224]byte

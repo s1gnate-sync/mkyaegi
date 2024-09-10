@@ -1,8 +1,0 @@
-func Do(ctx context.Context, labels LabelSet, f func(context.Context))
-func ForLabels(ctx context.Context, f func(key, value string) bool)
-func Label(ctx context.Context, key string) (string, bool)
-func SetGoroutineLabels(ctx context.Context)
-func StartCPUProfile(w io.Writer) error
-func StopCPUProfile()
-func WithLabels(ctx context.Context, labels LabelSet) context.Context
-func WriteHeapProfile(w io.Writer) error

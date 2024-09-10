@@ -1,8 +1,0 @@
-func DataErrReader(r io.Reader) io.Reader
-func ErrReader(err error) io.Reader
-func HalfReader(r io.Reader) io.Reader
-func NewReadLogger(prefix string, r io.Reader) io.Reader
-func NewWriteLogger(prefix string, w io.Writer) io.Writer
-func OneByteReader(r io.Reader) io.Reader
-func TestReader(r io.Reader, content []byte) error
-func TimeoutReader(r io.Reader) io.Reader

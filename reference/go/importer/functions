@@ -1,3 +1,0 @@
-func Default() types.Importer
-func For(compiler string, lookup Lookup) types.Importer
-func ForCompiler(fset *token.FileSet, compiler string, lookup Lookup) types.Importer

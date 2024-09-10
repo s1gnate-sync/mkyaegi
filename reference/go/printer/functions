@@ -1,1 +1,0 @@
-func Fprint(output io.Writer, fset *token.FileSet, node any) error

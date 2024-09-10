@@ -1,1 +1,0 @@
-func Checksum(data []byte) uint32

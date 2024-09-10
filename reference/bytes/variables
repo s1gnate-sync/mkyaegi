@@ -1,1 +1,0 @@
-var ErrTooLarge = errors.New("bytes.Buffer: too large")

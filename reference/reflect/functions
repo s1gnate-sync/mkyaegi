@@ -1,4 +1,0 @@
-func Copy(dst, src Value) int
-func DeepEqual(x, y any) bool
-func Select(cases []SelectCase) (chosen int, recv Value, recvOK bool)
-func Swapper(slice any) func(i, j int)

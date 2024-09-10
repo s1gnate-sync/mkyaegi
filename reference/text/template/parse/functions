@@ -1,2 +1,0 @@
-func IsEmptyTree(n Node) bool
-func Parse(name, text, leftDelim, rightDelim string, funcs ...map[string]any) (map[string]*Tree, error)

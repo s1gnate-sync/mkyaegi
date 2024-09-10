@@ -1,3 +1,0 @@
-func After(d Duration) <-chan Time
-func Sleep(d Duration)
-func Tick(d Duration) <-chan Time

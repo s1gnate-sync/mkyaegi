@@ -1,5 +1,0 @@
-func Fix(h Interface, i int)
-func Init(h Interface)
-func Pop(h Interface) any
-func Push(h Interface, x any)
-func Remove(h Interface, i int) any

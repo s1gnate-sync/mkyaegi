@@ -1,1 +1,0 @@
-var ErrInvalidMediaParameter = errors.New("mime: invalid media parameter")

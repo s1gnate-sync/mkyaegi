@@ -1,4 +1,0 @@
-func CMYKToRGB(c, m, y, k uint8) (uint8, uint8, uint8)
-func RGBToCMYK(r, g, b uint8) (uint8, uint8, uint8, uint8)
-func RGBToYCbCr(r, g, b uint8) (uint8, uint8, uint8)
-func YCbCrToRGB(y, cb, cr uint8) (uint8, uint8, uint8)

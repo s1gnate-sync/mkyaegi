@@ -1,9 +1,0 @@
-var (
-	// Deprecated: No longer used.
-	ErrPersistEOF = &http.ProtocolError{ErrorString: "persistent connection closed"}
-	// Deprecated: No longer used.
-	ErrClosed = &http.ProtocolError{ErrorString: "connection closed by user"}
-	// Deprecated: No longer used.
-	ErrPipeline = &http.ProtocolError{ErrorString: "pipeline error"}
-)
-var ErrLineTooLong = internal.ErrLineTooLong

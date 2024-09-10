@@ -1,8 +1,0 @@
-func Copy(dst Writer, src Reader) (written int64, err error)
-func CopyBuffer(dst Writer, src Reader, buf []byte) (written int64, err error)
-func CopyN(dst Writer, src Reader, n int64) (written int64, err error)
-func Pipe() (*PipeReader, *PipeWriter)
-func ReadAll(r Reader) ([]byte, error)
-func ReadAtLeast(r Reader, buf []byte, min int) (n int, err error)
-func ReadFull(r Reader, buf []byte) (n int, err error)
-func WriteString(w Writer, s string) (n int, err error)

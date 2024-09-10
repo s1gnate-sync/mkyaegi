@@ -1,1 +1,0 @@
-var ErrNoSymbols = errors.New("no symbol section")

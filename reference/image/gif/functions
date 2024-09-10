@@ -1,4 +1,0 @@
-func Decode(r io.Reader) (image.Image, error)
-func DecodeConfig(r io.Reader) (image.Config, error)
-func Encode(w io.Writer, m image.Image, o *Options) error
-func EncodeAll(w io.Writer, g *GIF) error

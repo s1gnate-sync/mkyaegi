@@ -1,1 +1,0 @@
-var Discard io.Writer = io.Discard

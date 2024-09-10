@@ -1,4 +1,0 @@
-func Marshal(val any) ([]byte, error)
-func MarshalWithParams(val any, params string) ([]byte, error)
-func Unmarshal(b []byte, val any) (rest []byte, err error)
-func UnmarshalWithParams(b []byte, val any, params string) (rest []byte, err error)

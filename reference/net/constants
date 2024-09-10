@@ -1,4 +1,0 @@
-const (
-	IPv4len = 4
-	IPv6len = 16
-)

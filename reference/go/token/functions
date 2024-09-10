@@ -1,3 +1,0 @@
-func IsExported(name string) bool
-func IsIdentifier(name string) bool
-func IsKeyword(name string) bool

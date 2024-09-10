@@ -1,4 +1,0 @@
-func GoVersion(x Expr) string
-func IsGoBuild(line string) bool
-func IsPlusBuild(line string) bool
-func PlusBuildLines(x Expr) ([]string, error)

@@ -1,2 +1,0 @@
-func Drivers() []string
-func Register(name string, driver driver.Driver)

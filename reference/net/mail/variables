@@ -1,1 +1,0 @@
-var ErrHeaderNotPresent = errors.New("mail: header not in message")

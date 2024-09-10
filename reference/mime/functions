@@ -1,5 +1,0 @@
-func AddExtensionType(ext, typ string) error
-func ExtensionsByType(typ string) ([]string, error)
-func FormatMediaType(t string, param map[string]string) string
-func ParseMediaType(v string) (mediatype string, params map[string]string, err error)
-func TypeByExtension(ext string) string

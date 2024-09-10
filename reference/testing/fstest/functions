@@ -1,1 +1,0 @@
-func TestFS(fsys fs.FS, expected ...string) error

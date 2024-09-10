@@ -1,5 +1,0 @@
-const (
-	MaxVarintLen16 = 3
-	MaxVarintLen32 = 5
-	MaxVarintLen64 = 10
-)

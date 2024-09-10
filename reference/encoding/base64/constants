@@ -1,4 +1,0 @@
-const (
-	StdPadding rune = '=' // Standard padding character
-	NoPadding  rune = -1  // No padding
-)

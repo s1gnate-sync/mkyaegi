@@ -17,7 +17,6 @@ var Symbols = interp.Exports{}
 func init() {
 	Symbols["lib/lib"] = map[string]reflect.Value{
 		"Packages": reflect.ValueOf(Packages),
-		"Exports":  reflect.ValueOf(Exports),
 	}
 }
 
@@ -49,26 +48,12 @@ func Packages() []string {
 			if strings.HasPrefix(pkg, "github.com/traefik/yaegi/stdlib") {
 				continue
 			}
-			parts := strings.Split(pkg, "/")
-			packages = append(packages, strings.Join(parts[0:len(parts)-1], "/"))
-		}
-	}
-	return packages
-}
 
-func Exports(query string) ([]string, error) {
-	for _, exports := range exportsList() {
-		for pkg, symbols := range exports {
-			parts := strings.Split(pkg, "/")
-			if strings.Join(parts[0:len(parts)-1], "/") == query || query == parts[len(parts)-1] {
-				names := []string{}
-
-				for name := range symbols {
-					names = append(names, name)
-				}
-				return names, nil
+			index := strings.LastIndex(pkg, "/")
+			if index >= 0 {
+				packages = append(packages, fmt.Sprintf("%s:%s", pkg[0:index], pkg[index+1:]))
 			}
 		}
 	}
-	return nil, fmt.Errorf("'%s' not found", query)
+	return packages
 }

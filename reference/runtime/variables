@@ -1,1 +1,0 @@
-var MemProfileRate int = 512 * 1024

@@ -1,5 +1,0 @@
-type Block struct {
-	Type    string            // The type, taken from the preamble (i.e. "RSA PRIVATE KEY").
-	Headers map[string]string // Optional headers.
-	Bytes   []byte            // The decoded bytes of the contents. Typically a DER encoded ASN.1 structure.
-}

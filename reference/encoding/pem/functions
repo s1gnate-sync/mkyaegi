@@ -1,2 +1,0 @@
-func Encode(out io.Writer, b *Block) error
-func EncodeToMemory(b *Block) []byte

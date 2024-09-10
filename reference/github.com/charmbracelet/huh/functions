@@ -1,8 +1,0 @@
-func NextField() tea.Msg
-func PrevField() tea.Msg
-func Run(field Field) error
-func ValidateLength(minl, maxl int) func(s string) error
-func ValidateMaxLength(v int) func(s string) error
-func ValidateMinLength(v int) func(s string) error
-func ValidateNotEmpty() func(s string) error
-func ValidateOneOf(options ...string) func(string) error

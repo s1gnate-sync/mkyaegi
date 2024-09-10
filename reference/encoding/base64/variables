@@ -1,4 +1,0 @@
-var RawStdEncoding = StdEncoding.WithPadding(NoPadding)
-var RawURLEncoding = URLEncoding.WithPadding(NoPadding)
-var StdEncoding = NewEncoding("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/")
-var URLEncoding = NewEncoding("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_")

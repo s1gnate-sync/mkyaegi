@@ -1,6 +1,0 @@
-func ConstantTimeByteEq(x, y uint8) int
-func ConstantTimeCompare(x, y []byte) int
-func ConstantTimeCopy(v int, x, y []byte)
-func ConstantTimeEq(x, y int32) int
-func ConstantTimeLessOrEq(x, y int) int
-func ConstantTimeSelect(v, x, y int) int

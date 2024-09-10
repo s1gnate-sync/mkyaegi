@@ -1,9 +1,0 @@
-type Region struct {
-	// Has unexported fields.
-}
-func StartRegion(ctx context.Context, regionType string) *Region
-func (r *Region) End()
-type Task struct {
-	// Has unexported fields.
-}
-func NewTask(pctx context.Context, taskType string) (ctx context.Context, task *Task)

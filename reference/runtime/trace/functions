@@ -1,6 +1,0 @@
-func IsEnabled() bool
-func Log(ctx context.Context, category, message string)
-func Logf(ctx context.Context, category, format string, args ...any)
-func Start(w io.Writer) error
-func Stop()
-func WithRegion(ctx context.Context, regionType string, fn func())

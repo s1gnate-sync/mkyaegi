@@ -1,2 +1,0 @@
-type BuildInfo = debug.BuildInfo
-func Read(r io.ReaderAt) (*BuildInfo, error)

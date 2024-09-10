@@ -1,1 +1,0 @@
-var ErrNotFat = &FormatError{0, "not a fat Mach-O file", nil}

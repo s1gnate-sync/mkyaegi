@@ -1,1 +1,0 @@
-var ErrLength = errors.New("encoding/hex: odd length hex string")

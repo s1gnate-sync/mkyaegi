@@ -1,5 +1,0 @@
-const (
-	LowestPrec  = 0 // non-operators
-	UnaryPrec   = 6
-	HighestPrec = 7
-)

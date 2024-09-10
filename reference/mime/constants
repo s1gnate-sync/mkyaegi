@@ -1,6 +1,0 @@
-const (
-	// BEncoding represents Base64 encoding scheme as defined by RFC 2045.
-	BEncoding = WordEncoder('b')
-	// QEncoding represents the Q-encoding scheme as defined by RFC 2047.
-	QEncoding = WordEncoder('q')
-)

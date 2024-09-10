@@ -1,4 +1,0 @@
-func IsPredeclared(s string) bool
-func Synopsis(text string) string
-func ToHTML(w io.Writer, text string, words map[string]string)
-func ToText(w io.Writer, text string, prefix, codePrefix string, width int)

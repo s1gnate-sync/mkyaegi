@@ -1,5 +1,0 @@
-func GenerateKey(curve Curve, rand io.Reader) (priv []byte, x, y *big.Int, err error)
-func Marshal(curve Curve, x, y *big.Int) []byte
-func MarshalCompressed(curve Curve, x, y *big.Int) []byte
-func Unmarshal(curve Curve, data []byte) (x, y *big.Int)
-func UnmarshalCompressed(curve Curve, data []byte) (x, y *big.Int)

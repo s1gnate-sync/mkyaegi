@@ -1,5 +1,0 @@
-func Checksum(data []byte, tab *Table) uint32
-func ChecksumIEEE(data []byte) uint32
-func New(tab *Table) hash.Hash32
-func NewIEEE() hash.Hash32
-func Update(crc uint32, tab *Table, p []byte) uint32

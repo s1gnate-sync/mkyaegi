@@ -1,5 +1,0 @@
-func New128() hash.Hash
-func New128a() hash.Hash
-func New32() hash.Hash32
-func New32a() hash.Hash32
-func New64() hash.Hash64

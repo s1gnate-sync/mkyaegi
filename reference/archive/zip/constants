@@ -1,4 +1,0 @@
-const (
-	Store   uint16 = 0 // no compression
-	Deflate uint16 = 8 // DEFLATE compressed
-)

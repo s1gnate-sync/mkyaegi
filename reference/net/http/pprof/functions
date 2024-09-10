@@ -1,5 +1,0 @@
-func Cmdline(w http.ResponseWriter, r *http.Request)
-func Handler(name string) http.Handler
-func Index(w http.ResponseWriter, r *http.Request)
-func Profile(w http.ResponseWriter, r *http.Request)
-func Symbol(w http.ResponseWriter, r *http.Request)

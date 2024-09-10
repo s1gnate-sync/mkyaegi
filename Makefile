@@ -1,16 +1,33 @@
 cflags ?= -l -B
 ldflags ?= -w -s
 
-cmd:
-	CGO_ENABLED=0 go build -a -trimpath -gcflags=all="$(cflags)" -ldflags="$(ldflags)" cmd/yaegi.go
+default:
+	@echo "Usage of make:" >&2
+	@echo -e "	make debug\n\t\tbuild for debug" >&2
+	@echo -e "	make release\n\t\tbuild for release" >&2
+	@echo -e "	make library\n\t\tgenerate library exports" >&2
+	@echo -e "	make reference\n\t\tgenerate package reference" >&2
 
-lib:
-	GOBIN=$(PWD)/tools test -e tools/extract || go install github.com/traefik/yaegi/internal/cmd/extract@latest
-	PATH="$(PWD)/tools:$(PATH)" go generate -x lib/go1.23-generate.go
+debug:
+	@echo "[debug] building yaegi..." >&2
+	@go build -C cmd/run -o $(PWD)/yaegi
 
-ref:
-	tools/gen-reference
+release:
+	@echo "[release] building yaegi..." >&2
+	@(CGO_ENABLED=0 go build -C cmd/run -o $(PWD)/yaegi -a -trimpath -gcflags=all="$(cflags)" -ldflags="$(ldflags)")
 
-all: lib cmd ref	
+tools/extract:
+	@! test -e tools/extract
+	@(GOBIN=$(PWD)/tools go install github.com/traefik/yaegi/internal/cmd/extract@latest)
 
-.PHONY: all cmd lib ref
+library:
+	@make tools/extract --quiet
+	@echo "[library] generating exports..." >&2
+	@rm -f lib/go1_23_*
+	@(PATH="$(PWD)/tools:$(PATH)" go generate -x lib/go1.23-generate.go)
+
+reference:
+	@echo "[reference] generating references..." >&2
+	@tools/gen-reference
+
+.PHONY: default release debug library reference tools/extract

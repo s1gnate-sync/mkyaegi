@@ -1,7 +1,0 @@
-type Cipher struct {
-	// Has unexported fields.
-}
-func NewCipher(key []byte) (*Cipher, error)
-func (c *Cipher) Reset()
-func (c *Cipher) XORKeyStream(dst, src []byte)
-type KeySizeError int

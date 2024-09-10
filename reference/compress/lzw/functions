@@ -1,2 +1,0 @@
-func NewReader(r io.Reader, order Order, litWidth int) io.ReadCloser
-func NewWriter(w io.Writer, order Order, litWidth int) io.WriteCloser

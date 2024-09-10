@@ -1,2 +1,0 @@
-func NewReader(r io.Reader) io.ReadCloser
-func NewReaderDict(r io.Reader, dict []byte) io.ReadCloser

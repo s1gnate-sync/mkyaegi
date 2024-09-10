@@ -1,4 +1,0 @@
-func ParseDir(fset *token.FileSet, path string, filter func(fs.FileInfo) bool, mode Mode) (pkgs map[string]*ast.Package, first error)
-func ParseExpr(x string) (ast.Expr, error)
-func ParseExprFrom(fset *token.FileSet, filename string, src any, mode Mode) (expr ast.Expr, err error)
-func ParseFile(fset *token.FileSet, filename string, src any, mode Mode) (f *ast.File, err error)

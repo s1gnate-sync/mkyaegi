@@ -1,9 +1,0 @@
-var (
-	ErrInvalid    = errInvalid()    // "invalid argument"
-	ErrPermission = errPermission() // "permission denied"
-	ErrExist      = errExist()      // "file already exists"
-	ErrNotExist   = errNotExist()   // "file does not exist"
-	ErrClosed     = errClosed()     // "file already closed"
-)
-var SkipAll = errors.New("skip everything and stop the walk")
-var SkipDir = errors.New("skip this directory")

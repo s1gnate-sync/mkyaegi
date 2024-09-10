@@ -1,4 +1,0 @@
-func GenerateKey(rand io.Reader) (PublicKey, PrivateKey, error)
-func Sign(privateKey PrivateKey, message []byte) []byte
-func Verify(publicKey PublicKey, message, sig []byte) bool
-func VerifyWithOptions(publicKey PublicKey, message, sig []byte, opts *Options) error

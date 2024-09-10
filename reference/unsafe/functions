@@ -1,5 +1,0 @@
-func Alignof(x ArbitraryType) uintptr
-func Offsetof(x ArbitraryType) uintptr
-func Sizeof(x ArbitraryType) uintptr
-func String(ptr *byte, len IntegerType) string
-func StringData(str string) *byte

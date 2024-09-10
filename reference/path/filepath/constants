@@ -1,4 +1,0 @@
-const (
-	Separator     = os.PathSeparator
-	ListSeparator = os.PathListSeparator
-)

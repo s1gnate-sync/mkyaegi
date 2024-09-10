@@ -1,1 +1,0 @@
-func Node(dst io.Writer, fset *token.FileSet, node any) error

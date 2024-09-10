@@ -1,3 +1,0 @@
-func Do(f func(KeyValue))
-func Handler() http.Handler
-func Publish(name string, v Var)

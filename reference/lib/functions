@@ -1,3 +1,0 @@
-func Exports(query string) ([]string, error)
-func Interp(options interp.Options, importUsed bool) (*interp.Interpreter, error)
-func Load(instance *interp.Interpreter) error

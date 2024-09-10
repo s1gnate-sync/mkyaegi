@@ -1,4 +1,0 @@
-func Dial(network, address string) (*rpc.Client, error)
-func NewClient(conn io.ReadWriteCloser) *rpc.Client
-func NewClientCodec(conn io.ReadWriteCloser) rpc.ClientCodec
-func NewServerCodec(conn io.ReadWriteCloser) rpc.ServerCodec

@@ -1,2 +1,0 @@
-var ErrConnClosed = errors.New("fcgi: connection to web server closed")
-var ErrRequestAborted = errors.New("fcgi: request aborted by web server")

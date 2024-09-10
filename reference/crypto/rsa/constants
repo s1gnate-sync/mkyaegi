@@ -1,8 +1,0 @@
-const (
-	// PSSSaltLengthAuto causes the salt in a PSS signature to be as large
-	// as possible when signing, and to be auto-detected when verifying.
-	PSSSaltLengthAuto = 0
-	// PSSSaltLengthEqualsHash causes the salt length to equal the length
-	// of the hash used in the signature.
-	PSSSaltLengthEqualsHash = -1
-)

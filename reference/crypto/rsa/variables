@@ -1,3 +1,0 @@
-var ErrDecryption = errors.New("crypto/rsa: decryption error")
-var ErrMessageTooLong = errors.New("crypto/rsa: message too long for RSA key size")
-var ErrVerification = errors.New("crypto/rsa: verification error")

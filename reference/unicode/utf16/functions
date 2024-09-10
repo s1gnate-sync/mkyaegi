@@ -1,6 +1,0 @@
-func AppendRune(a []uint16, r rune) []uint16
-func Decode(s []uint16) []rune
-func DecodeRune(r1, r2 rune) rune
-func Encode(s []rune) []uint16
-func EncodeRune(r rune) (r1, r2 rune)
-func IsSurrogate(r rune) bool

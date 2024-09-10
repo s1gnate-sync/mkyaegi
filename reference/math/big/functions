@@ -1,2 +1,0 @@
-func Jacobi(x, y *Int) int
-func ParseFloat(s string, base int, prec uint, mode RoundingMode) (f *Float, b int, err error)

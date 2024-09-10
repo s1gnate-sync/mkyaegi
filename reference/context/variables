@@ -1,2 +1,0 @@
-var Canceled = errors.New("context canceled")
-var DeadlineExceeded error = deadlineExceededError{}

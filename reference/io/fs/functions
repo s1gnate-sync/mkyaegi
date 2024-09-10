@@ -1,6 +1,0 @@
-func FormatDirEntry(dir DirEntry) string
-func FormatFileInfo(info FileInfo) string
-func Glob(fsys FS, pattern string) (matches []string, err error)
-func ReadFile(fsys FS, name string) ([]byte, error)
-func ValidPath(name string) bool
-func WalkDir(fsys FS, root string, fn WalkDirFunc) error
